@@ -1,0 +1,662 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Лавка «Ларец»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Forum&family=Commissioner:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: музейная инвентарная карточка — тонкие двойные линейки, номера лотов, гравюрные иллюстрации */
+:root{
+  --paper:#ECEBE4; --paper-2:#E3E2D9; --card:#F4F3EE;
+  --ink:#22251F; --ink-soft:#5A5D53; --line:#C9C7BB;
+  --bronze:#86663B; --verdigris:#4C675E; --bronze-tint:rgba(134,102,59,.10);
+  --f-display:"Old Standard TT","Times New Roman",Georgia,serif;
+  --f-body:"Commissioner","Segoe UI",system-ui,sans-serif;
+  --f-label:"Forum","Old Standard TT",Georgia,serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#171915; --paper-2:#1E211C; --card:#22261F;
+  --ink:#E7E3D6; --ink-soft:#A6A696; --line:#3A3E35;
+  --bronze:#C49D68; --verdigris:#8FAEA2; --bronze-tint:rgba(196,157,104,.10);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#171915; --paper-2:#1E211C; --card:#22261F;
+  --ink:#E7E3D6; --ink-soft:#A6A696; --line:#3A3E35;
+  --bronze:#C49D68; --verdigris:#8FAEA2; --bronze-tint:rgba(196,157,104,.10);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--paper);color:var(--ink);font:300 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+  background-image:radial-gradient(var(--line) .6px,transparent .7px);background-size:5px 5px;mix-blend-mode:multiply}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;line-height:1.12}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:1}
+@media (min-width:720px){.wrap{padding-left:max(40px,env(safe-area-inset-left,0px));padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.label{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.18em;font-size:13px;color:var(--bronze)}
+.rule{border:0;height:4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:3px;border-radius:2px}
+
+/* ——— Header ——— */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .4s var(--ease)}
+header.scrolled{border-bottom-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:18px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo svg{width:34px;height:34px;color:var(--bronze)}
+.logo b{font:400 22px/1 var(--f-display);letter-spacing:.02em}
+.logo small{display:block;font:400 10.5px/1.2 var(--f-label);letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px}
+.menu{display:flex;gap:30px;list-style:none;margin:0;padding:0}
+.menu a{text-decoration:none;font-size:14.5px;font-weight:400;color:var(--ink-soft);position:relative;padding-block:4px;transition:color .3s}
+.menu a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--bronze);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.menu a:hover{color:var(--ink)}
+.menu a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-cta{display:flex;align-items:center;gap:18px}
+.phone{font:400 16px/1 var(--f-display);text-decoration:none;white-space:nowrap}
+.burger{display:none;background:none;border:1px solid var(--line);width:44px;height:44px;border-radius:50%;cursor:pointer;color:var(--ink)}
+.burger span{display:block;width:16px;height:1px;background:currentColor;margin:4px auto;transition:transform .35s var(--ease),opacity .2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+@media (max-width:980px){
+  .burger{display:block}
+  .phone{display:none}
+  .menu{position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:var(--paper);border-bottom:1px solid var(--line);
+    padding:8px max(16px,env(safe-area-inset-right,0px)) 18px max(16px,env(safe-area-inset-left,0px));
+    clip-path:inset(0 0 100% 0);transition:clip-path .5s var(--ease);visibility:hidden}
+  .menu.open{clip-path:inset(0 0 0 0);visibility:visible}
+  .menu a{display:block;padding-block:14px;font-size:18px;font-family:var(--f-display);color:var(--ink);border-bottom:1px solid var(--line)}
+  .menu a::after{display:none}
+}
+
+/* ——— Buttons ——— */
+.btn{display:inline-flex;align-items:center;gap:12px;font:500 15px/1 var(--f-body);letter-spacing:.02em;text-decoration:none;padding:17px 28px;border-radius:999px;border:1px solid var(--ink);cursor:pointer;position:relative;overflow:hidden;isolation:isolate;transition:color .45s var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--ink);z-index:-1;transform:translateY(101%);transition:transform .5s var(--ease)}
+.btn:hover::before{transform:translateY(0)}
+.btn:hover{color:var(--paper)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid::before{background:var(--bronze)}
+.btn.solid:hover{color:var(--paper)}
+.btn .arr{transition:transform .45s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn.sm{padding:12px 20px;font-size:14px}
+
+/* ——— Hero ——— */
+.hero{padding-block:56px 40px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,6.2vw,82px);letter-spacing:-.01em;margin-top:22px}
+.hero h1 em{font-style:italic;color:var(--bronze)}
+.hero .lead{font-size:clamp(17px,1.5vw,19px);color:var(--ink-soft);max-width:34em;margin-top:28px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--line)}
+.facts div{padding:20px 20px 0 0}
+.facts div+div{padding-left:20px;border-left:1px solid var(--line)}
+.facts b{display:block;font:400 30px/1 var(--f-display)}
+.facts span{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.4}
+.hero-art{position:relative;display:grid;place-items:center}
+.cameo{width:100%;max-width:440px;aspect-ratio:4/5;border:1px solid var(--line);border-radius:50% 50% 48% 48%/40% 40% 60% 60%;display:grid;place-items:center;position:relative;background:radial-gradient(ellipse at 50% 40%,var(--card),transparent 70%)}
+.cameo::before{content:"";position:absolute;inset:12px;border:1px solid var(--line);border-radius:inherit}
+.watch{width:78%;color:var(--ink)}
+.watch .draw{stroke-dasharray:var(--len,1200);stroke-dashoffset:0;animation:draw 2.8s var(--ease) both}
+.watch .d2{animation-delay:.5s}.watch .d3{animation-delay:.9s}
+@keyframes draw{from{stroke-dashoffset:var(--len,1200)}to{stroke-dashoffset:0}}
+.watch .num{font-family:var(--f-display);font-size:15px;fill:var(--ink);opacity:1;animation:fade 1.4s 1.2s both}
+.watch .hand{transform-origin:150px 205px;transition:transform .6s var(--ease)}
+.watch .sec{transform-origin:150px 205px}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.tag{position:absolute;background:var(--card);border:1px solid var(--line);padding:12px 16px;font-size:13px;line-height:1.35;box-shadow:0 18px 40px -24px rgba(0,0,0,.35);animation:float 7s ease-in-out infinite}
+.tag .label{font-size:11px;display:block;margin-bottom:3px}
+.tag.t1{left:-6%;top:16%}
+.tag.t2{right:-4%;bottom:14%;animation-delay:-3.5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-art{order:-1}
+  .cameo{max-width:300px}
+  .tag.t1{left:0}.tag.t2{right:0}
+}
+@media (max-width:520px){
+  .facts{grid-template-columns:1fr}
+  .facts div,.facts div+div{padding:16px 0;border-left:0;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:14px}
+  .facts span{margin-top:0}
+  .tag{display:none}
+}
+
+/* ——— Marquee ——— */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding-block:16px;margin-top:24px;position:relative;z-index:1}
+.marquee-track{display:flex;gap:48px;width:max-content;animation:marq 60s linear infinite}
+.marquee span{font:italic 400 22px/1 var(--f-display);color:var(--ink-soft);white-space:nowrap;display:flex;align-items:center;gap:48px}
+.marquee span::after{content:"✦";font-style:normal;font-size:11px;color:var(--bronze)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ——— Sections ——— */
+section{position:relative;z-index:1}
+.sec{padding-block:clamp(72px,10vw,130px)}
+.sec-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
+.sec-head h2{font-size:clamp(32px,4.4vw,56px);margin-top:16px}
+.sec-head p{color:var(--ink-soft);max-width:30em;justify-self:end}
+@media (max-width:820px){.sec-head{grid-template-columns:1fr;gap:18px}.sec-head p{justify-self:start}}
+
+/* Categories */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cat{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 26px 28px;position:relative;overflow:hidden;min-width:0;transition:background .5s var(--ease)}
+.cat::before{content:"";position:absolute;inset:0;background:var(--card);transform:scaleY(0);transform-origin:bottom;transition:transform .55s var(--ease);z-index:-1}
+.cat{isolation:isolate}
+.cat:hover::before{transform:scaleY(1)}
+.cat svg{width:46px;height:46px;color:var(--bronze);transition:transform .6s var(--ease)}
+.cat:hover svg{transform:translateY(-4px) rotate(-4deg)}
+.cat h3{font-size:24px;margin-top:22px}
+.cat p{font-size:14.5px;color:var(--ink-soft);margin-top:10px;line-height:1.55}
+@media (max-width:980px){.cats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.cats{grid-template-columns:1fr}.cat{display:grid;grid-template-columns:46px 1fr;gap:4px 18px;padding:22px 18px}.cat svg{grid-row:span 2}.cat h3{margin-top:0;font-size:22px}.cat p{margin-top:0}}
+.not-accepted{margin-top:28px;display:flex;gap:16px;align-items:flex-start;font-size:14.5px;color:var(--ink-soft);max-width:60em}
+.not-accepted b{color:var(--ink);font-weight:500}
+.not-accepted svg{flex:none;width:20px;height:20px;color:var(--verdigris);margin-top:3px}
+
+/* Process — a real sequence */
+.process{background:var(--paper-2)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s;position:relative}
+.steps::before{content:"";position:absolute;left:0;right:0;top:27px;height:1px;background:var(--line)}
+.step{padding-right:28px;position:relative;min-width:0}
+.step .n{width:55px;height:55px;border-radius:50%;border:1px solid var(--bronze);display:grid;place-items:center;font:400 22px/1 var(--f-display);color:var(--bronze);background:var(--paper-2);position:relative;transition:background .4s,color .4s}
+.step:hover .n{background:var(--bronze);color:var(--paper-2)}
+.step h3{font-size:24px;margin-top:26px}
+.step p{font-size:15px;color:var(--ink-soft);margin-top:12px}
+.step .time{display:inline-block;margin-top:16px;font:400 12px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--verdigris);border:1px solid currentColor;padding:7px 10px;border-radius:999px}
+@media (max-width:900px){
+  .steps{grid-template-columns:1fr;gap:34px}
+  .steps::before{left:27px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .step{display:grid;grid-template-columns:55px 1fr;gap:0 22px;padding:0}
+  .step .n{grid-row:span 4}
+  .step h3{margin-top:10px}
+}
+.promise{margin-top:64px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;border-top:1px solid var(--line);padding-top:36px}
+.promise blockquote{margin:0;font:italic 400 clamp(21px,2.3vw,28px)/1.4 var(--f-display);max-width:40em}
+.promise .seal{width:84px;height:84px;color:var(--bronze);animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:600px){.promise{grid-template-columns:1fr}}
+
+/* Lots */
+.lots{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.lot{background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.lot:hover{transform:translateY(-6px);box-shadow:0 30px 60px -36px rgba(0,0,0,.4)}
+.lot-img{aspect-ratio:5/4;max-width:100%;display:grid;place-items:center;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at 50% 60%,var(--paper),var(--card) 75%);position:relative;overflow:hidden}
+.lot-img svg{width:58%;height:auto;color:var(--ink);transition:transform .8s var(--ease)}
+.lot:hover .lot-img svg{transform:scale(1.05)}
+.lot-no{position:absolute;top:14px;left:16px;font:400 12px/1 var(--f-label);letter-spacing:.18em;color:var(--ink-soft)}
+.lot-body{padding:22px 24px 24px;display:flex;flex-direction:column;gap:12px;flex:1}
+.lot h3{font-size:23px}
+.lot dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:14px}
+.lot dt{color:var(--ink-soft)}
+.lot dd{margin:0}
+.lot .price{margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.lot .price span{font-size:13px;color:var(--ink-soft)}
+.lot .price b{font:400 21px/1 var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:980px){.lots{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.lots{grid-template-columns:1fr}}
+.lots-note{margin-top:22px;font-size:13.5px;color:var(--ink-soft)}
+
+/* Proba converter */
+.proba{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.proba-card{background:var(--card);border:1px solid var(--line);padding:clamp(24px,4vw,44px);position:relative}
+.proba-card::after{content:"";position:absolute;inset:8px;border:1px solid var(--line);pointer-events:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:relative;z-index:1}
+.chip{font:400 18px/1 var(--f-display);border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:11px 16px;cursor:pointer;transition:all .35s var(--ease);font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--bronze)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.proba-out{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:34px;position:relative;z-index:1}
+.mark{width:120px;height:120px;color:var(--bronze)}
+.mark text{font-family:var(--f-display);fill:currentColor}
+.metric{font:400 clamp(48px,7vw,72px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.metric small{font-size:.32em;color:var(--ink-soft);margin-left:6px}
+.proba-desc{font-size:15px;color:var(--ink-soft);margin-top:10px;min-height:3.2em}
+.fade-swap{animation:swap .5s var(--ease)}
+@keyframes swap{from{opacity:.2;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:900px){.proba{grid-template-columns:1fr;gap:36px}}
+@media (max-width:440px){.proba-out{grid-template-columns:1fr;gap:12px}.mark{width:90px;height:90px}}
+
+/* Experts */
+.experts{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.expert{display:flex;flex-direction:column;gap:14px;min-width:0}
+.portrait{aspect-ratio:4/5;max-width:100%;background:var(--paper-2);border:1px solid var(--line);display:grid;place-items:center;position:relative;overflow:hidden}
+.portrait svg{width:62%;color:var(--ink-soft)}
+.portrait .label{position:absolute;bottom:14px;left:16px;font-size:11px}
+.expert h3{font-size:24px}
+.expert p{font-size:14.5px;color:var(--ink-soft)}
+@media (max-width:820px){.experts{grid-template-columns:1fr 1fr}}
+@media (max-width:540px){.experts{grid-template-columns:1fr}.portrait{aspect-ratio:16/10}.portrait svg{width:34%}}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:56px}
+@media (max-width:860px){.faq-grid{grid-template-columns:1fr;gap:28px}}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:24px;align-items:center;padding-block:24px;font:400 clamp(19px,2vw,23px)/1.3 var(--f-display)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;position:relative;transition:transform .45s var(--ease),border-color .3s}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1px;background:var(--ink);transform:translate(-50%,-50%)}
+.faq summary i::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .45s var(--ease)}
+.faq details[open] summary i{transform:rotate(180deg);border-color:var(--bronze)}
+.faq details[open] summary i::after{transform:translate(-50%,-50%) rotate(0)}
+.faq .ans{color:var(--ink-soft);padding-bottom:24px;max-width:44em;font-size:16px}
+.faq details[open] .ans{animation:swap .5s var(--ease)}
+
+/* Contact */
+.contact{background:var(--ink);color:var(--paper)}
+.contact .label{color:var(--bronze)}
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px}
+@media (max-width:900px){.contact-grid{grid-template-columns:1fr;gap:44px}}
+.contact h2{font-size:clamp(34px,4.6vw,58px);margin-top:16px}
+.contact .intro{color:color-mix(in srgb,var(--paper) 70%,var(--ink));margin-top:20px;max-width:30em}
+.info{margin-top:40px;display:grid;gap:22px}
+.info div{display:grid;grid-template-columns:120px 1fr;gap:16px;padding-bottom:20px;border-bottom:1px solid color-mix(in srgb,var(--paper) 18%,var(--ink))}
+.info dt{font:400 12px/1.6 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--paper) 55%,var(--ink))}
+.info dd{margin:0;font:400 19px/1.45 var(--f-display)}
+.copy{background:none;border:0;color:var(--bronze);font:400 13px var(--f-body);cursor:pointer;padding:0;margin-left:10px;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:460px){.info div{grid-template-columns:1fr;gap:4px}}
+form{display:grid;gap:18px;background:color-mix(in srgb,var(--paper) 5%,var(--ink));border:1px solid color-mix(in srgb,var(--paper) 16%,var(--ink));padding:clamp(22px,4vw,40px)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+.field{display:grid;gap:8px;min-width:0}
+.field label{font:400 12px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--paper) 60%,var(--ink))}
+.field input,.field select,.field textarea{width:100%;background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,var(--paper) 28%,var(--ink));color:var(--paper);font:300 17px/1.4 var(--f-body);padding:10px 0;border-radius:0;transition:border-color .3s}
+.field select option{background:var(--ink);color:var(--paper)}
+.field textarea{resize:vertical;min-height:90px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--bronze)}
+.field input::placeholder,.field textarea::placeholder{color:color-mix(in srgb,var(--paper) 38%,var(--ink))}
+.field label.drop{font:300 14.5px/1.5 var(--f-body);text-transform:none;letter-spacing:0;display:block;position:relative}
+.drop{border:1px dashed color-mix(in srgb,var(--paper) 30%,var(--ink));padding:20px;text-align:center;cursor:pointer;transition:border-color .3s,background .3s;font-size:14.5px;color:color-mix(in srgb,var(--paper) 70%,var(--ink))}
+.drop:hover,.drop.over{border-color:var(--bronze);background:color-mix(in srgb,var(--bronze) 8%,transparent)}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
+.thumbs img{width:62px;height:62px;object-fit:cover;border:1px solid color-mix(in srgb,var(--paper) 25%,var(--ink));animation:swap .4s var(--ease)}
+.err{color:#E3A08A;font-size:13px;min-height:1em}
+.form-foot{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.form-foot small{font-size:12.5px;color:color-mix(in srgb,var(--paper) 50%,var(--ink));max-width:24em;line-height:1.5}
+.contact .btn{border-color:var(--paper);color:var(--paper)}
+.contact .btn::before{background:var(--bronze)}
+.contact .btn.solid{background:var(--paper);color:var(--ink)}
+.contact .btn.solid:hover{color:var(--paper)}
+.done{text-align:left;display:grid;gap:14px;animation:swap .6s var(--ease)}
+.done h3{font-size:32px}
+.done p{color:color-mix(in srgb,var(--paper) 72%,var(--ink))}
+.done .demo{font-size:13px;color:var(--bronze)}
+
+footer{background:var(--ink);color:color-mix(in srgb,var(--paper) 55%,var(--ink));font-size:13.5px;position:relative;z-index:1}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;padding-block:28px;border-top:1px solid color-mix(in srgb,var(--paper) 14%,var(--ink))}
+
+/* Reveal: elements start visible; only off-screen ones are hidden by JS before they animate in */
+.pending{opacity:0;transform:translateY(22px)}
+.revealed{opacity:1;transform:none;transition:opacity 1s var(--ease),transform 1s var(--ease)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .pending{opacity:1;transform:none}
+}
+</style>
+
+<header id="top">
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="Лавка «Ларец» — на главную">
+      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="5" y="15" width="30" height="19" rx="1"/><path d="M5 15c0-6 6-9 15-9s15 3 15 9"/><path d="M5 21h30"/><rect x="17" y="18" width="6" height="7" rx="1"/><circle cx="20" cy="21.5" r=".9" fill="currentColor"/></svg>
+      <span><b>Ларец</b><small>Антикварная лавка · с 1998</small></span>
+    </a>
+    <ul class="menu" id="menu">
+      <li><a href="#buy">Что покупаем</a></li>
+      <li><a href="#process">Как оцениваем</a></li>
+      <li><a href="#lots">Атрибуции</a></li>
+      <li><a href="#proba">Пробы</a></li>
+      <li><a href="#faq">Вопросы</a></li>
+      <li><a href="#contact">Контакты</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
+      <a class="btn sm solid" href="#contact">Оценка по фото</a>
+      <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="label">Скупка · Оценка · Экспертиза</span>
+      <h1>Вещи с&nbsp;историей заслуживают <em>внимательного</em> взгляда</h1>
+      <p class="lead">Оценим предмет по фотографии за один день, проведём атрибуцию и выкупим по справедливой цене с оплатой в день сделки. Без спешки, без давления и без скрытых комиссий.</p>
+      <div class="hero-actions">
+        <a class="btn solid" href="#contact">Отправить фото на оценку <span class="arr">→</span></a>
+        <a class="btn" href="#process">Как проходит оценка</a>
+      </div>
+      <div class="facts">
+        <div><b>27 лет</b><span>работаем с частными собраниями</span></div>
+        <div><b>0 ₽</b><span>стоимость предварительной оценки</span></div>
+        <div><b>1 день</b><span>от осмотра до выплаты</span></div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="cameo">
+        <svg class="watch" viewBox="0 0 300 380" fill="none" stroke="currentColor" stroke-linecap="round">
+          <circle class="draw" style="--len:400" cx="150" cy="38" r="20" stroke-width="1.3"/>
+          <path class="draw" style="--len:200" d="M138 58h24v14h-24zM134 72h32v10h-32z" stroke-width="1.2"/>
+          <circle class="draw" style="--len:820" cx="150" cy="205" r="122" stroke-width="1.6"/>
+          <circle class="draw d2" style="--len:760" cx="150" cy="205" r="112" stroke-width=".8"/>
+          <circle class="num" cx="150" cy="205" r="98" stroke-width=".6" stroke-dasharray="1 5.1" style="fill:none"/>
+          <circle class="draw d3" style="--len:200" cx="150" cy="265" r="22" stroke-width=".7"/>
+          <g id="numerals"></g>
+          <g id="ticks" stroke-width=".8"></g>
+          <path class="hand" id="hHour" d="M150 205 L150 150 M146 160 Q150 142 154 160" stroke-width="2.4"/>
+          <path class="hand" id="hMin" d="M150 205 L150 118" stroke-width="1.5"/>
+          <line class="sec" id="hSec" x1="150" y1="265" x2="150" y2="248" stroke-width=".9"/>
+          <circle cx="150" cy="205" r="4" fill="currentColor" stroke="none"/>
+          <circle cx="150" cy="265" r="1.6" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="tag t1"><span class="label">Лот 0412</span>Карманные часы<br>«Павел Буре», ок. 1905</div>
+      <div class="tag t2"><span class="label">Оценка</span>85 000 – 110 000 ₽</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marquee">
+    <span>Серебро 84-й пробы</span><span>Фарфор ИФЗ и Гарднера</span><span>Живопись XIX–XX веков</span><span>Каминные часы</span><span>Иконы в окладах</span><span>Бронза и чугунное литьё</span><span>Редкие издания</span><span>Мебель красного дерева</span>
+  </div>
+</div>
+
+<section class="sec" id="buy">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="label">Что мы покупаем</span><h2>Принимаем предметы, сделанные до 1970-х годов</h2></div>
+      <p>Если вы не уверены, представляет ли вещь ценность, пришлите фото. Мы ответим честно, даже если ответ «это стоит сохранить в семье».</p>
+    </div>
+    <div class="cats">
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="7" y="6" width="34" height="36"/><rect x="11" y="10" width="26" height="28"/><path d="M11 32l8-9 6 6 4-4 8 8"/><circle cx="30" cy="17" r="2.5"/></svg><h3>Живопись и графика</h3><p>Русская и западноевропейская школа, этюды, гравюры, литографии с подписью.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M14 18h20l-2 18H16z"/><path d="M14 18c0-4 4-6 10-6s10 2 10 6"/><path d="M24 12V8M21 8h6"/><path d="M34 22c5 0 5 8 0 8"/><path d="M12 40h24"/></svg><h3>Серебро</h3><p>Столовое и чайное серебро с клеймами мастеров, подстаканники, портсигары.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M18 8h12M19 8c0 6-7 9-7 18 0 8 5 14 12 14s12-6 12-14c0-9-7-12-7-18"/><path d="M14 26c4 3 16 3 20 0"/><path d="M20 40h8"/></svg><h3>Фарфор и стекло</h3><p>Императорский завод, Гарднер, Кузнецов, Мейсен, советский агитфарфор.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 40h24M16 40V20h16v20"/><path d="M14 20c0-6 4-10 10-10s10 4 10 10"/><circle cx="24" cy="27" r="5"/><path d="M24 27v-3M24 27l2 1"/></svg><h3>Часы</h3><p>Каминные, настенные, карманные. В том числе неисправные и без ключа.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="11" y="6" width="26" height="36"/><path d="M16 12h16v24H16z"/><path d="M24 15v18M19 20h10"/></svg><h3>Иконы</h3><p>Иконы XVIII – начала XX века, в окладах и без. Работаем только с законным происхождением.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M24 6v4M20 10h8l-2 6h-4z"/><path d="M22 16v18M26 16v18"/><path d="M16 40c0-4 4-6 8-6s8 2 8 6z"/></svg><h3>Бронза и литьё</h3><p>Скульптура, подсвечники, письменные приборы, каслинское литьё.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 12c6-2 12-2 16 2 4-4 10-4 16-2v26c-6-2-12-2-16 2-4-4-10-4-16-2z"/><path d="M24 14v26"/></svg><h3>Книги и документы</h3><p>Прижизненные издания, книги до 1917 года, открытки, карты и автографы.</p></article>
+      <article class="cat rv"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 18h32v14H8z"/><path d="M8 25h32M20 21.5h8M20 28.5h8"/><path d="M10 32v8M38 32v8"/><path d="M12 18c0-5 5-8 12-8s12 3 12 8"/></svg><h3>Мебель и интерьер</h3><p>Красное дерево, карельская берёза, бюро, комоды, зеркала в резных рамах.</p></article>
+    </div>
+    <p class="not-accepted rv"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 13.5v.5"/></svg><span><b>Что мы не принимаем.</b> Государственные награды СССР и России, оружие, предметы культурного наследия из государственных собраний и любые вещи без подтверждённого законного происхождения.</span></p>
+  </div>
+</section>
+
+<section class="sec process" id="process">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="label">Как проходит оценка</span><h2>Четыре шага от&nbsp;фотографии до выплаты</h2></div>
+      <p>Вы в любой момент можете остановиться. Предварительная оценка и экспертиза ни к чему не обязывают.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><div class="n">I</div><h3>Фото и описание</h3><p>Пришлите 3–5 снимков: общий вид, клейма и подписи, оборотная сторона, повреждения.</p><span class="time">5 минут</span></div>
+      <div class="step rv"><div class="n">II</div><h3>Предварительная оценка</h3><p>Эксперт по профилю называет диапазон рыночной стоимости и объясняет, от чего он зависит.</p><span class="time">в течение дня</span></div>
+      <div class="step rv"><div class="n">III</div><h3>Очный осмотр</h3><p>В лавке или с выездом на дом: проверка материала, клейм, сохранности, следов реставрации.</p><span class="time">30–60 минут</span></div>
+      <div class="step rv"><div class="n">IV</div><h3>Договор и оплата</h3><p>Оформляем договор купли-продажи. Деньги наличными или переводом в тот же день.</p><span class="time">в день сделки</span></div>
+    </div>
+    <div class="promise rv">
+      <svg class="seal" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="c" d="M50 50m-38 0a38 38 0 1 1 76 0a38 38 0 1 1-76 0"/></defs><circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width=".8"/><circle cx="50" cy="50" r="28" fill="none" stroke="currentColor" stroke-width=".8"/><text font-family="Forum,serif" font-size="8.4" letter-spacing="2.6" fill="currentColor"><textPath href="#c">ЧЕСТНАЯ ОЦЕНКА · ЛАРЕЦ · С 1998 · </textPath></text><text x="50" y="56" text-anchor="middle" font-family="Old Standard TT,serif" font-size="18" fill="currentColor">Л</text></svg>
+      <blockquote>Мы называем цену до того, как вы решите продавать, и объясняем, из чего она складывается. Если выгоднее выставить вещь на аукцион, мы так и скажем.</blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="lots">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="label">Из недавних атрибуций</span><h2>Что приносили в&nbsp;лавку этой осенью</h2></div>
+      <p>Каждая вещь получает инвентарную карточку: датировка, мастер или завод, материал, сохранность и обоснование цены.</p>
+    </div>
+    <div class="lots">
+      <article class="lot rv">
+        <div class="lot-img"><span class="lot-no">ЛОТ 0398</span>
+          <svg viewBox="0 0 200 180" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M70 60h60l-6 80H76z"/><path d="M66 60c0-14 15-22 34-22s34 8 34 22"/><path d="M100 38v-10M92 28h16"/><path d="M80 75h40M78 95h44" stroke-dasharray="2 4"/><path d="M130 72c22 0 22 40 0 40M70 72c-22 0-22 40 0 40"/><path d="M70 140h60l6 10H64z"/><ellipse cx="100" cy="118" rx="8" ry="5" stroke-width=".8"/></svg>
+        </div>
+        <div class="lot-body"><h3>Сахарница с крышкой</h3>
+          <dl><dt>Мастер</dt><dd>Иван Хлебников</dd><dt>Место, год</dt><dd>Москва, 1882</dd><dt>Материал</dt><dd>серебро 84, чернь</dd></dl>
+          <div class="price"><span>Оценка</span><b>140 000 – 175 000 ₽</b></div>
+        </div>
+      </article>
+      <article class="lot rv">
+        <div class="lot-img"><span class="lot-no">ЛОТ 0405</span>
+          <svg viewBox="0 0 200 180" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M60 40h80v100H60z"/><path d="M52 140h96v10H52z"/><path d="M60 40c0-14 18-22 40-22s40 8 40 22"/><circle cx="100" cy="80" r="26"/><circle cx="100" cy="80" r="21" stroke-width=".6"/><path d="M100 80V64M100 80l10 6" stroke-width="1.6"/><path d="M76 118c8 8 40 8 48 0" stroke-width=".8"/><path d="M100 18v-6" /><circle cx="100" cy="9" r="3"/></svg>
+        </div>
+        <div class="lot-body"><h3>Каминные часы</h3>
+          <dl><dt>Мастерская</dt><dd>Japy Frères</dd><dt>Место, год</dt><dd>Франция, ок. 1870</dd><dt>Материал</dt><dd>бронза, золочение</dd></dl>
+          <div class="price"><span>Оценка</span><b>210 000 – 260 000 ₽</b></div>
+        </div>
+      </article>
+      <article class="lot rv">
+        <div class="lot-img"><span class="lot-no">ЛОТ 0411</span>
+          <svg viewBox="0 0 200 180" fill="none" stroke="currentColor" stroke-width="1.2"><ellipse cx="100" cy="140" rx="62" ry="12"/><ellipse cx="100" cy="140" rx="40" ry="7" stroke-width=".7"/><path d="M72 96c0 22 12 34 28 34s28-12 28-34z"/><ellipse cx="100" cy="96" rx="28" ry="6"/><path d="M128 102c16-2 16 20-2 18"/><path d="M80 110c6 6 14 8 20 8" stroke-width=".7"/><path d="M84 104l4 4 4-4 4 4 4-4 4 4 4-4 4 4" stroke-width=".7"/></svg>
+        </div>
+        <div class="lot-body"><h3>Чайная пара «Кобальтовая сетка»</h3>
+          <dl><dt>Завод</dt><dd>ЛФЗ им. Ломоносова</dd><dt>Год</dt><dd>1953</dd><dt>Сохранность</dt><dd>отличная, без сколов</dd></dl>
+          <div class="price"><span>Оценка</span><b>18 000 – 24 000 ₽</b></div>
+        </div>
+      </article>
+    </div>
+    <p class="lots-note rv">Диапазон оценки показывает рыночную стоимость на дату экспертизы. Итоговая цена выкупа обсуждается после очного осмотра.</p>
+  </div>
+</section>
+
+<section class="sec process" id="proba">
+  <div class="wrap proba">
+    <div class="rv">
+      <span class="label">Справочник собирателя</span>
+      <h2 style="font-size:clamp(32px,4.4vw,56px);margin-top:16px">Как читать пробу на&nbsp;старом серебре и золоте</h2>
+      <p style="color:var(--ink-soft);margin-top:22px;max-width:32em">До 1927 года в России пробу указывали в золотниках: сколько частей драгоценного металла приходится на 96 частей сплава. Выберите число с клейма, и мы переведём его в привычную метрическую пробу.</p>
+    </div>
+    <div class="proba-card rv">
+      <span class="label">Золотниковая проба на клейме</span>
+      <div class="chips" id="chips" role="group" aria-label="Золотниковая проба"></div>
+      <div class="proba-out">
+        <svg class="mark" viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="60" rx="50" ry="38" fill="none" stroke="currentColor" stroke-width="1.4"/><ellipse cx="60" cy="60" rx="44" ry="32" fill="none" stroke="currentColor" stroke-width=".6"/><text id="markNum" x="60" y="70" text-anchor="middle" font-size="32">84</text></svg>
+        <div>
+          <div class="metric" id="metric">875<small>метрическая проба</small></div>
+          <p class="proba-desc" id="probaDesc"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="experts">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="label">Кто оценивает</span><h2>Три эксперта, у&nbsp;каждого свой профиль</h2></div>
+      <p>Предмет смотрит специалист по конкретной области, а спорные случаи мы разбираем вместе.</p>
+    </div>
+    <div class="experts">
+      <article class="expert rv"><div class="portrait"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1"><circle cx="50" cy="38" r="17"/><path d="M18 92c2-20 15-30 32-30s30 10 32 30"/><path d="M38 36h8M54 36h8M46 36c1-2 7-2 8 0" stroke-width=".8"/></svg><span class="label">Живопись · иконы</span></div><h3>Анна Северцева</h3><p>Искусствовед, 19 лет в атрибуции русской живописи. Работала в реставрационных мастерских.</p></article>
+      <article class="expert rv"><div class="portrait"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1"><circle cx="50" cy="38" r="17"/><path d="M18 92c2-20 15-30 32-30s30 10 32 30"/><path d="M36 48c4 8 24 8 28 0" stroke-width=".8"/></svg><span class="label">Серебро · часы</span></div><h3>Михаил Ордынцев</h3><p>Специалист по ювелирным клеймам и механическим часам. Сам обслуживает старые механизмы.</p></article>
+      <article class="expert rv"><div class="portrait"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1"><circle cx="50" cy="38" r="17"/><path d="M18 92c2-20 15-30 32-30s30 10 32 30"/><path d="M33 34c2-14 32-14 34 0" stroke-width=".8"/></svg><span class="label">Фарфор · мебель</span></div><h3>Елена Гарина</h3><p>Знает марки русских и европейских заводов по сотням вариантов. Консультирует коллекционеров.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec process" id="faq">
+  <div class="wrap faq-grid">
+    <div class="rv"><span class="label">Частые вопросы</span><h2 style="font-size:clamp(32px,4.4vw,56px);margin-top:16px">Что обычно спрашивают перед первым визитом</h2></div>
+    <div class="faq rv">
+      <details open><summary>Сколько стоит оценка?<i></i></summary><p class="ans">Предварительная оценка по фотографиям и очный осмотр в лавке бесплатны. Письменное экспертное заключение для страховой или наследственного дела оформляем отдельно, стоимость зависит от предмета.</p></details>
+      <details><summary>Нужно ли чистить вещь перед оценкой?<i></i></summary><p class="ans">Нет. Пожалуйста, не полируйте серебро и бронзу, не протирайте живопись и не мойте фарфор агрессивными средствами. Патина и следы времени часто влияют на цену больше, чем блеск.</p></details>
+      <details><summary>Какие документы понадобятся?<i></i></summary><p class="ans">Паспорт для договора купли-продажи. Если сохранились чеки, письма, семейные фотографии с предметом или документы о наследстве, возьмите их: история владения повышает стоимость.</p></details>
+      <details><summary>Можно ли оставить вещь на комиссию?<i></i></summary><p class="ans">Да. Если вы не торопитесь, мы можем выставить предмет на комиссию в лавке или подготовить его к аукциону. Комиссия обсуждается до подписания договора.</p></details>
+      <details><summary>Вы выезжаете на дом?<i></i></summary><p class="ans">Да, по Москве и ближнему Подмосковью, когда предметов много или они крупные: мебель, библиотека, коллекция. Выезд эксперта бесплатный при предварительной оценке по фото.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="rv">
+      <span class="label">Оценка по фото</span>
+      <h2>Расскажите о вашей вещи</h2>
+      <p class="intro">Приложите несколько фотографий и коротко опишите, что знаете о предмете. Эксперт ответит в течение рабочего дня.</p>
+      <dl class="info">
+        <div><dt>Адрес</dt><dd>Москва, Малый Власьевский пер., 7<br><span style="font-size:15px;opacity:.7">вход со двора, звонок «Ларец»</span></dd></div>
+        <div><dt>Телефон</dt><dd><span id="tel">+7 (495) 000-00-00</span><button class="copy" type="button" data-copy="tel">скопировать</button></dd></div>
+        <div><dt>Часы работы</dt><dd>Пн–Сб, 11:00–20:00<br><span style="font-size:15px;opacity:.7">воскресенье по записи</span></dd></div>
+      </dl>
+    </div>
+    <div class="rv">
+      <form id="form" novalidate>
+        <div class="row">
+          <div class="field"><label for="f-name">Ваше имя</label><input id="f-name" name="name" placeholder="Как к вам обращаться" autocomplete="name"></div>
+          <div class="field"><label for="f-phone">Телефон или e-mail</label><input id="f-phone" name="phone" placeholder="Для ответа эксперта" autocomplete="tel"></div>
+        </div>
+        <div class="field"><label for="f-cat">Что за предмет</label>
+          <select id="f-cat" name="cat"><option>Живопись и графика</option><option>Серебро</option><option>Фарфор и стекло</option><option>Часы</option><option>Иконы</option><option>Бронза и литьё</option><option>Книги и документы</option><option>Мебель и интерьер</option><option>Не знаю, нужна помощь</option></select>
+        </div>
+        <div class="field"><label for="f-desc">Что вы знаете о вещи</label><textarea id="f-desc" name="desc" placeholder="Например: досталась от бабушки, на донышке клеймо «84» и инициалы мастера"></textarea></div>
+        <div class="field">
+          <label class="drop" id="drop" for="f-files">
+            <input id="f-files" type="file" accept="image/*" multiple>
+            <span id="dropText">Перетащите фотографии сюда или нажмите, чтобы выбрать</span>
+            <span class="thumbs" id="thumbs"></span>
+          </label>
+        </div>
+        <p class="err" id="err" role="alert"></p>
+        <div class="form-foot">
+          <small>Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</small>
+          <button class="btn solid" type="submit">Отправить на оценку <span class="arr">→</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><span>© 1998–2026 Антикварная лавка «Ларец» · концепт-сайт для портфолио, лавка и эксперты вымышлены</span><span>Оценка · Скупка · Комиссия · Экспертные заключения</span></div>
+</footer>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Header border + mobile menu
+  const header = document.querySelector('header');
+  const onScroll = () => header.classList.toggle('scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  const burger = document.getElementById('burger'), menu = document.getElementById('menu');
+  burger.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') !== 'true';
+    burger.setAttribute('aria-expanded', open); menu.classList.toggle('open', open);
+    burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+  });
+  menu.addEventListener('click', e => { if (e.target.tagName === 'A') { burger.setAttribute('aria-expanded','false'); menu.classList.remove('open'); } });
+
+  // Marquee: duplicate for seamless loop
+  const mq = document.getElementById('marquee'); mq.innerHTML += mq.innerHTML;
+
+  // Pocket watch: numerals, ticks, live hands
+  const NS = 'http://www.w3.org/2000/svg', cx = 150, cy = 205;
+  const romans = ['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI'];
+  const g = document.getElementById('numerals'), t = document.getElementById('ticks');
+  romans.forEach((r,i) => {
+    if (i === 6) return; // место для секундного циферблата
+    const a = (i*30 - 90) * Math.PI/180, R = 84;
+    const el = document.createElementNS(NS,'text');
+    el.setAttribute('x', cx + R*Math.cos(a)); el.setAttribute('y', cy + R*Math.sin(a) + 5);
+    el.setAttribute('text-anchor','middle'); el.setAttribute('class','num'); el.setAttribute('stroke','none');
+    el.textContent = r; g.appendChild(el);
+  });
+  for (let i = 0; i < 60; i++) {
+    const a = (i*6 - 90) * Math.PI/180, r1 = i%5 ? 106 : 102, r2 = 110;
+    const l = document.createElementNS(NS,'line');
+    l.setAttribute('x1', cx + r1*Math.cos(a)); l.setAttribute('y1', cy + r1*Math.sin(a));
+    l.setAttribute('x2', cx + r2*Math.cos(a)); l.setAttribute('y2', cy + r2*Math.sin(a));
+    t.appendChild(l);
+  }
+  const hH = document.getElementById('hHour'), hM = document.getElementById('hMin'), hS = document.getElementById('hSec');
+  function tick(){
+    const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s/60, h = (d.getHours()%12) + m/60;
+    hH.style.transform = `rotate(${h*30}deg)`; hM.style.transform = `rotate(${m*6}deg)`;
+    hS.setAttribute('transform', `rotate(${s*6} 150 265)`);
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Reveal on scroll — only elements below the first screen are hidden, so the page is complete at rest
+  const items = [...document.querySelectorAll('.rv')];
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target, sibs = [...el.parentElement.children].filter(c => c.classList.contains('rv'));
+      el.style.transitionDelay = (Math.max(0, sibs.indexOf(el)) % 4) * 90 + 'ms';
+      el.classList.add('revealed'); el.classList.remove('pending'); io.unobserve(el);
+    }), {rootMargin:'0px 0px -8% 0px'});
+    items.forEach(el => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pending'); io.observe(el); } });
+  }
+
+  // Proba converter
+  const probas = {
+    56:'Низкая проба для золота: так клеймили недорогие ювелирные изделия конца XIX века.',
+    72:'Золото 750-й пробы по-нынешнему. Часто встречается на часовых корпусах и кольцах.',
+    84:'Самая распространённая проба русского серебра. Ставилась на столовые приборы, подстаканники, оклады.',
+    88:'Более высокое содержание серебра. Встречается на изделиях Фаберже, Овчинникова, Хлебникова.',
+    91:'Высокая проба: редкие предметы и церковная утварь.',
+    94:'Почти чистое золото, используется в отдельных медалях и ювелирных деталях.',
+    96:'Чистый металл без лигатуры. На бытовых предметах практически не встречается.'
+  };
+  const chips = document.getElementById('chips'), metric = document.getElementById('metric'),
+        desc = document.getElementById('probaDesc'), markNum = document.getElementById('markNum');
+  function setProba(z, animate){
+    const v = z/96*1000, val = Number.isInteger(v) ? v : v.toFixed(1).replace('.', ',');
+    metric.innerHTML = `${val}<small>метрическая проба</small>`;
+    markNum.textContent = z; desc.textContent = probas[z];
+    chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.z == z));
+    if (animate) [metric, desc].forEach(el => { el.classList.remove('fade-swap'); void el.offsetWidth; el.classList.add('fade-swap'); });
+  }
+  Object.keys(probas).forEach(z => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.dataset.z = z; b.textContent = z;
+    b.addEventListener('click', () => setProba(+z, true)); chips.appendChild(b);
+  });
+  setProba(84, false);
+
+  // Copy phone
+  document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.copy), text = el.textContent;
+    const ok = () => { btn.textContent = 'скопировано'; setTimeout(() => btn.textContent = 'скопировать', 1800); };
+    try { navigator.clipboard.writeText(text).then(ok, () => select(el)); } catch(e){ select(el); }
+  }));
+  function select(el){ const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+  // Photo drop zone with previews
+  const drop = document.getElementById('drop'), files = document.getElementById('f-files'),
+        thumbs = document.getElementById('thumbs'), dropText = document.getElementById('dropText');
+  let photos = [];
+  function addFiles(list){
+    [...list].filter(f => f.type.startsWith('image/')).slice(0, 8 - photos.length).forEach(f => {
+      photos.push(f); const img = document.createElement('img'); img.alt = f.name;
+      img.src = URL.createObjectURL(f); thumbs.appendChild(img);
+    });
+    dropText.textContent = photos.length ? `Фотографий: ${photos.length}. Можно добавить ещё` : 'Перетащите фотографии сюда или нажмите, чтобы выбрать';
+  }
+  files.addEventListener('change', () => addFiles(files.files));
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+
+  // Form
+  const form = document.getElementById('form'), err = document.getElementById('err');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const F = form.elements, name = F['name'].value.trim(), phone = F['phone'].value.trim();
+    if (!name || !phone) { err.textContent = 'Укажите имя и телефон или e-mail, чтобы эксперт мог ответить.'; (name ? F['phone'] : F['name']).focus(); return; }
+    err.textContent = '';
+    const cat = F['cat'].value;
+    form.innerHTML = `<div class="done"><span class="label">Заявка подготовлена</span><h3>Спасибо, ${name.replace(/[<>&"]/g,'')}</h3>
+      <p>Категория: ${cat}. Фотографий: ${photos.length}. Эксперт по этому профилю ответит в течение рабочего дня по контакту, который вы указали.</p>
+      <p class="demo">Это демонстрационная версия сайта: заявка никуда не отправляется.</p></div>`;
+  });
+})();
+</script>
+
+</body></html>
