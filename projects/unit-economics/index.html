@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Юнит-экономика товара · Никита Белосохов</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Golos+Text:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+.layout{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
+.inputs{display:grid;gap:12px}
+.inputs .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{display:grid;gap:16px}
+.verdict{font:600 17px var(--sans);padding:12px 16px;border-radius:8px}
+.verdict.ok{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.verdict.bad{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+.wf{display:grid;gap:7px;margin-top:6px}
+.wf .r{display:grid;grid-template-columns:150px minmax(0,1fr) 90px;gap:10px;align-items:center;font:13px var(--mono)}
+.wf .t{height:16px;background:var(--sunk);border-radius:3px;position:relative;overflow:hidden}
+.wf .f{position:absolute;top:0;bottom:0;border-radius:3px;background:var(--muted)}
+.wf .f.cost{background:var(--bad);opacity:.75}
+.wf .f.profit{background:var(--good)}
+.wf .f.price{background:var(--blue)}
+.wf .v{text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.layout{grid-template-columns:1fr}.wf .r{grid-template-columns:110px minmax(0,1fr) 80px}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="../../"><i></i>Никита Белосохов</a>
+  <nav><a href="../../#projects">все проекты</a>
+    <span class="switch" role="group" aria-label="Тема оформления"><button type="button" data-t="light">светлая</button><button type="button" data-t="dark">тёмная</button></span>
+  </nav>
+</header>
+<main style="gap:28px;padding-top:32px">
+  <section style="display:grid;gap:12px">
+    <a class="back" href="../../#projects">← к проектам</a>
+    <p class="eyebrow">проект · калькулятор</p>
+    <h1 style="max-width:22ch;font-size:clamp(30px,4.6vw,46px)">Юнит-экономика товара на маркетплейсе</h1>
+    <p class="sec-lead" style="margin-top:0">Вопрос, на который отвечает: сколько я зарабатываю с одной продажи и какую долю рекламы товар выдерживает. Поменяйте цифры — расчёт обновится сразу.</p>
+    <p class="note">Цифры по умолчанию — пример товара, не данные реального магазина. Тарифы маркетплейсов меняются, поэтому комиссию и логистику вводите свои.</p>
+  </section>
+
+  <section class="layout">
+    <form class="panel inputs" id="f" onsubmit="return false">
+      <div class="field"><label for="price">Цена продажи, ₽</label><input id="price" type="number" min="0" step="10" value="1490"></div>
+      <div class="field"><label for="cost">Себестоимость с доставкой до склада, ₽</label><input id="cost" type="number" min="0" step="10" value="520"></div>
+      <div class="row2">
+        <div class="field"><label for="comm">Комиссия МП, %</label><input id="comm" type="number" min="0" max="100" step="0.5" value="19"></div>
+        <div class="field"><label for="tax">Налог, % выручки</label><input id="tax" type="number" min="0" max="100" step="0.5" value="6"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="log">Логистика, ₽ за отправку</label><input id="log" type="number" min="0" step="5" value="85"></div>
+        <div class="field"><label for="buy">Выкуп, %</label><input id="buy" type="number" min="1" max="100" step="1" value="82"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="stor">Хранение, ₽ на единицу</label><input id="stor" type="number" min="0" step="1" value="18"></div>
+        <div class="field"><label for="drr">ДРР, % выручки</label><input id="drr" type="number" min="0" max="100" step="0.5" value="12"></div>
+      </div>
+    </form>
+
+    <div class="result">
+      <div class="kpis">
+        <div class="kpi"><span>прибыль с продажи</span><b id="kProfit">—</b><small id="kProfitN"></small></div>
+        <div class="kpi"><span>маржинальность</span><b id="kMargin">—</b><small>прибыль / цена</small></div>
+        <div class="kpi"><span>ROI</span><b id="kRoi">—</b><small>прибыль / себестоимость</small></div>
+        <div class="kpi"><span>предельный ДРР</span><b id="kBe">—</b><small>реклама, при которой прибыль = 0</small></div>
+      </div>
+      <p class="verdict" id="verdict"></p>
+      <div class="panel">
+        <h3>Куда уходит цена</h3>
+        <div class="wf" id="wf"></div>
+      </div>
+      <div class="panel" style="padding:0;overflow:hidden">
+        <div style="padding:18px 20px 4px"><h3>Сценарии по рекламе</h3><p class="sec-lead" style="margin-top:4px;font-size:14px">Что будет с прибылью, если изменить долю рекламных расходов. Продажи в месяц — для оценки масштаба.</p></div>
+        <div class="tw" style="border:0;border-radius:0;margin-top:8px">
+          <table><thead><tr><th>ДРР</th><th class="n">прибыль с продажи</th><th class="n">маржа</th><th class="n">прибыль при 300 продажах</th></tr></thead><tbody id="sc"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" style="display:grid;gap:10px">
+    <h3>Как считается</h3>
+    <p style="color:var(--muted);font-size:15px;max-width:75ch">Логистика делится на процент выкупа: при выкупе 82% на каждую оплаченную продажу приходится 1 / 0,82 ≈ 1,22 отправки, потому что возвраты тоже везут. Комиссия, налог и реклама считаются от цены. Предельный ДРР — доля выручки, которую остаётся отдать на рекламу, пока прибыль не станет нулевой.</p>
+    <p style="font:13px var(--mono);color:var(--muted)">прибыль = цена − себестоимость − цена × (комиссия + налог + ДРР) − логистика / выкуп − хранение</p>
+  </section>
+</main>
+<script src="../../assets/site.js"></script>
+<script>
+(function () {
+  var ids = ['price', 'cost', 'comm', 'tax', 'log', 'buy', 'stor', 'drr'];
+  function val(id) { var v = parseFloat(document.getElementById(id).value); return isFinite(v) ? v : 0; }
+  function calc(drrOverride) {
+    var p = val('price'), c = val('cost'), comm = val('comm') / 100, tax = val('tax') / 100;
+    var log = val('log'), buy = Math.max(val('buy'), 1) / 100, stor = val('stor');
+    var drr = drrOverride == null ? val('drr') / 100 : drrOverride;
+    var parts = {
+      cost: c, comm: p * comm, log: log / buy, stor: stor, tax: p * tax, ads: p * drr
+    };
+    var profit = p - parts.cost - parts.comm - parts.log - parts.stor - parts.tax - parts.ads;
+    var beforeAds = profit + parts.ads;
+    return { p: p, parts: parts, profit: profit, margin: p ? profit / p : 0, roi: c ? profit / c : 0, be: p ? beforeAds / p : 0 };
+  }
+  function render() {
+    var r = calc();
+    document.getElementById('kProfit').textContent = fmt.rub(r.profit);
+    document.getElementById('kProfit').style.color = r.profit >= 0 ? 'var(--good)' : 'var(--bad)';
+    document.getElementById('kProfitN').textContent = 'с одной оплаченной продажи';
+    document.getElementById('kMargin').textContent = fmt.pct(r.margin, 1);
+    document.getElementById('kRoi').textContent = fmt.pct(r.roi, 0);
+    document.getElementById('kBe').textContent = fmt.pct(Math.max(r.be, 0), 1);
+    var v = document.getElementById('verdict');
+    var drr = val('drr') / 100;
+    if (r.profit < 0) {
+      v.className = 'verdict bad';
+      v.textContent = 'Товар убыточен: каждая продажа стоит ' + fmt.rub(-r.profit) + '. ' + (r.be > 0 ? 'Снизьте ДРР ниже ' + fmt.pct(r.be, 1) + ' или поднимите цену.' : 'Даже без рекламы расходы выше цены — пересмотрите цену или себестоимость.');
+    } else {
+      v.className = 'verdict ok';
+      v.textContent = 'Товар прибыльный. Запас по рекламе: ещё ' + fmt.pct(Math.max(r.be - drr, 0), 1) + ' выручки до нуля.';
+    }
+    var rows = [
+      ['цена', r.p, 'price'], ['себестоимость', r.parts.cost, 'cost'], ['комиссия МП', r.parts.comm, 'cost'],
+      ['логистика с возвратами', r.parts.log, 'cost'], ['хранение', r.parts.stor, 'cost'], ['налог', r.parts.tax, 'cost'],
+      ['реклама', r.parts.ads, 'cost'], ['прибыль', r.profit, 'profit']
+    ];
+    var max = Math.max(r.p, 1), html = '', acc = 0;
+    rows.forEach(function (row, i) {
+      var w = Math.abs(row[1]) / max * 100, left;
+      if (row[2] === 'price') left = 0;
+      else if (row[2] === 'cost') { left = Math.max(0, 100 - (acc + Math.abs(row[1])) / max * 100); acc += row[1]; }
+      else left = row[1] >= 0 ? 0 : 0;
+      var cls = row[2] === 'profit' && row[1] < 0 ? 'cost' : row[2];
+      html += '<div class="r"><span>' + row[0] + '</span><div class="t"><div class="f ' + cls + '" style="left:' + left.toFixed(2) + '%;width:' + Math.min(w, 100).toFixed(2) + '%"></div></div><span class="v">' + fmt.rub(row[1]) + '</span></div>';
+    });
+    document.getElementById('wf').innerHTML = html;
+    var sc = '';
+    [0.05, 0.08, 0.12, 0.15, 0.2, 0.25, 0.3].forEach(function (d) {
+      var s = calc(d), cur = Math.abs(d - drr) < 1e-9;
+      sc += '<tr' + (cur ? ' style="background:var(--accent-soft)"' : '') + '><td>' + fmt.pct(d) + (cur ? ' · сейчас' : '') + '</td><td class="n ' + (s.profit >= 0 ? 'up' : 'down') + '">' + fmt.rub(s.profit) + '</td><td class="n">' + fmt.pct(s.margin, 1) + '</td><td class="n">' + fmt.rub(s.profit * 300) + '</td></tr>';
+    });
+    document.getElementById('sc').innerHTML = sc;
+  }
+  ids.forEach(function (id) { document.getElementById(id).addEventListener('input', render); });
+  render();
+})();
+</script>
+</body>
+</html>
