@@ -49,6 +49,101 @@
   $$('[data-shelf]').forEach(el => el.innerHTML = I.shelf);
   $$('[data-map]').forEach(el => el.innerHTML = I.map(el.dataset.map === 'dark'));
 
+  /* ——— Онлайн-заказ (демо) ——— */
+  const order = {
+    items() { try { return JSON.parse(store.get('k-order')) || []; } catch (e) { return []; } },
+    save(l) { store.set('k-order', JSON.stringify(l)); renderOrder(); },
+    add(it) {
+      const l = this.items(), key = [it.name, it.size, it.opts || ''].join('|');
+      const same = l.find(x => x.key === key);
+      if (same) same.qty++; else l.push({ ...it, key, qty: 1 });
+      this.save(l); toast(`${it.name}${it.size ? ' ' + it.size : ''} — в заказе`); bump();
+    },
+    sum() { return this.items().reduce((s, x) => s + x.price * x.qty, 0); },
+    count() { return this.items().reduce((s, x) => s + x.qty, 0); }
+  };
+  document.body.insertAdjacentHTML('beforeend', `
+    <button class="fab" type="button" aria-label="Открыть заказ" hidden><span class="fab-n">0</span><span>Ваш заказ</span><b class="fab-sum"></b></button>
+    <div class="scrim" hidden></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title" aria-hidden="true" inert>
+      <div class="dr-head"><h2 id="dr-title">Ваш заказ</h2><button class="icon-btn dr-close" type="button" aria-label="Закрыть">✕</button></div>
+      <div class="dr-body"></div>
+    </aside>
+    <div class="toast" role="status"></div>`);
+  const drawer = $('.drawer'), scrim = $('.scrim'), fab = $('.fab');
+  function openOrder() { renderOrder(); scrim.hidden = false; drawer.removeAttribute('inert'); drawer.setAttribute('aria-hidden', 'false'); requestAnimationFrame(() => { scrim.classList.add('on'); drawer.classList.add('on'); }); document.body.style.overflow = 'hidden'; setTimeout(() => $('.dr-close').focus(), 50); }
+  function closeOrder() { scrim.classList.remove('on'); drawer.classList.remove('on'); drawer.setAttribute('inert', ''); drawer.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; setTimeout(() => scrim.hidden = true, 400); }
+  $$('.order-open').forEach(b => b.addEventListener('click', () => order.count() ? openOrder() : (location.pathname.endsWith('menu.html') ? $('#menu')?.scrollIntoView({ behavior: 'smooth' }) : (location.href = 'menu.html'))));
+  fab.addEventListener('click', openOrder); scrim.addEventListener('click', closeOrder); $('.dr-close').addEventListener('click', closeOrder);
+  addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('on')) closeOrder(); });
+  let tT;
+  function toast(t) { const el = $('.toast'); el.innerHTML = `${t}<button type="button">Оформить</button>`; el.classList.add('on'); el.querySelector('button').onclick = openOrder; clearTimeout(tT); tT = setTimeout(() => el.classList.remove('on'), 2800); }
+  function bump() { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
+  document.addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) order.add(JSON.parse(decodeURIComponent(b.dataset.add))); });
+
+  function slots() {
+    // интервалы по 15 минут: от «через 15 минут» до 18:45; если поздно — на завтра с 8:00
+    const res = [], m0 = Math.ceil((mins + 15) / 15) * 15;
+    if (open && m0 <= 18 * 60 + 45) for (let m = m0; m <= 18 * 60 + 45; m += 15) res.push(['Сегодня', m]);
+    else for (let m = 8 * 60; m <= 12 * 60; m += 15) res.push(['Завтра', m]);
+    return res.map(([d, m]) => `${d}, ${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
+  }
+  function renderOrder() {
+    const l = order.items(), n = order.count(), sum = order.sum();
+    fab.hidden = !n; $('.fab-n').textContent = n; $('.fab-sum').textContent = rub(sum);
+    const body = $('.dr-body');
+    if (body.dataset.done) return;
+    if (!n) { body.innerHTML = `<div class="dr-empty">${I.icon('espresso')}<h3>Пока пусто</h3><p class="muted">Выберите напиток в меню — нажмите на его цену.</p><a class="btn" href="menu.html">Открыть меню</a></div>`; return; }
+    const keep = {}; $$('input,textarea,select', body).forEach(i => keep[i.id] = i.value);
+    const asap = open && mins < 18 * 60 + 45;
+    body.innerHTML = `<ul class="dr-list">${l.map((x, i) => `<li><span class="ico">${I.icon(x.ico)}</span><div><b>${x.name}${x.size ? ' · ' + x.size : ''}</b>${x.opts ? `<small>${x.opts}</small>` : ''}<span class="qty"><button type="button" data-q="${i}" data-d="-1" aria-label="Меньше">−</button>${x.qty}<button type="button" data-q="${i}" data-d="1" aria-label="Больше">+</button></span></div><strong>${rub(x.price * x.qty)}</strong></li>`).join('')}</ul>
+      <form class="form dr-form" novalidate>
+        <div class="field"><span class="lbl2">Как заберёте</span><div class="seg" id="o-where"><button type="button" aria-pressed="true" data-v="С собой">С собой</button><button type="button" aria-pressed="false" data-v="В зале">Выпью в зале</button></div></div>
+        <div class="field"><label for="o-time">Когда</label><select id="o-time">${asap ? '<option>Как можно скорее · 10–15 минут</option>' : ''}${slots().map(s => `<option>${s}</option>`).join('')}</select>${!asap ? '<p class="muted" style="font-size:13px">Сейчас кофейня закрыта — оформите предзаказ на утро.</p>' : ''}</div>
+        <div class="two"><div class="field"><label for="o-name">Имя</label><input id="o-name" autocomplete="given-name" required><span class="msg">Как назвать заказ?</span></div>
+        <div class="field"><label for="o-phone">Телефон</label><input id="o-phone" type="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required><span class="msg">Проверьте номер</span></div></div>
+        <div class="field"><label for="o-note">Комментарий</label><textarea id="o-note" placeholder="Например: без сахара, крышку не нужно"></textarea></div>
+        <div class="dr-total"><span>Итого · оплата при получении</span><b>${rub(sum)}</b></div>
+        <button class="btn" type="submit">Оформить заказ</button>
+        <p class="muted" style="font-size:12.5px;text-align:center">Демо: заказ кофейне не отправляется</p>
+      </form>`;
+    Object.entries(keep).forEach(([k, v]) => { const el = document.getElementById(k); if (el && v) el.value = v; });
+    $$('input[type=tel]', body).forEach(phoneMask);
+    $$('input,textarea', body).forEach(i => i.addEventListener('input', () => i.closest('.field')?.classList.remove('err')));
+    $('#o-where').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $$('#o-where button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+    $('.dr-list').addEventListener('click', e => {
+      const q = e.target.closest('[data-q]'); if (!q) return;
+      const l2 = order.items(), it = l2[+q.dataset.q]; it.qty += +q.dataset.d;
+      if (it.qty < 1) l2.splice(+q.dataset.q, 1);
+      order.save(l2);
+    });
+    $('.dr-form').addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+      $$('[required]', e.target).forEach(i => { let bad = !i.value.trim(); if (!bad && i.type === 'tel') bad = i.value.replace(/\D/g, '').length < 11; i.closest('.field').classList.toggle('err', bad); if (bad && ok) { i.focus(); ok = false; } });
+      if (!ok) return;
+      const num = 100 + Math.floor(Math.random() * 900), when = $('#o-time').value, where = $('#o-where [aria-pressed="true"]').dataset.v, name = $('#o-name').value.trim();
+      store.set('k-order', '[]'); body.dataset.done = '1'; fab.hidden = true;
+      body.innerHTML = `<div class="dr-done"><p class="eyebrow">Заказ № ${num}</p><h3>${name}, спасибо!</h3><p class="muted">${when.startsWith('Как можно') ? 'Будет готов через 10–15 минут' : when} · ${where.toLowerCase()} · ${rub(sum)}</p>
+        <ol class="track"><li class="on">Принят</li><li>Готовим</li><li>Готов, ждём вас</li></ol>
+        <div class="dr-cup">${I.icon('cappuccino')}</div>
+        <p class="muted" style="font-size:13px">Назовите бариста номер заказа. Это демонстрационный сайт: заказ никуда не отправлен.</p>
+        <button class="btn ghost" type="button" id="o-new">Новый заказ</button></div>`;
+      const steps = $$('.track li', body);
+      setTimeout(() => steps[1]?.classList.add('on'), 1600); setTimeout(() => steps[2]?.classList.add('on'), 4200);
+      $('#o-new').onclick = () => { delete body.dataset.done; closeOrder(); renderOrder(); };
+    });
+  }
+  function phoneMask(inp) {
+    inp.addEventListener('input', () => {
+      let v = inp.value.replace(/\D/g, ''); if (!v) { inp.value = ''; return; }
+      if (v[0] === '8') v = '7' + v.slice(1); if (v[0] !== '7') v = '7' + v; v = v.slice(0, 11);
+      const p = [v.slice(1, 4), v.slice(4, 7), v.slice(7, 9), v.slice(9, 11)];
+      inp.value = '+7' + (p[0] ? ` (${p[0]}` : '') + (p[0].length === 3 ? ')' : '') + (p[1] ? ` ${p[1]}` : '') + (p[2] ? `-${p[2]}` : '') + (p[3] ? `-${p[3]}` : '');
+    });
+  }
+  renderOrder();
+
   /* ——— Меню ——— */
   const MENU = [
     { id: 'coffee', name: 'Кофе', note: 'Эспрессо на свежеобжаренной арабике. Объём: S 250 · M 350 · L 450 мл.', items: [
@@ -87,7 +182,7 @@
     tabs.innerHTML = MENU.map((g, i) => `<button class="tab" role="tab" type="button" data-g="${g.id}" aria-selected="${i === 0}">${g.name}</button>`).join('') + `<button class="tab" role="tab" type="button" data-g="build" aria-selected="false">Собрать напиток</button>`;
     box.innerHTML = MENU.map(g => `<section class="menu-group" id="${g.id}"><h2>${g.name}</h2><p>${g.note}</p><div class="items">${g.items.map(([ico, n, d, p, hit]) => `
       <div class="item" data-reveal><div class="ico">${I.icon(ico)}</div><div><h3>${n}${hit ? '<span class="hit">хит</span>' : ''}</h3><p>${d}</p></div>
-      <div class="pr">${p.length > 1 ? `${rub(p[0])}<small>${p.length === 3 ? 'S · M · L: ' : 'S · M: '}${p.join(' / ')}</small>` : rub(p[0])}</div></div>`).join('')}</div></section>`).join('');
+      <div class="buy">${p.map((pr, i) => `<button type="button" class="add" data-add="${encodeURIComponent(JSON.stringify({ ico, name: n, size: p.length > 1 ? 'SML'[i] : '', price: pr }))}" aria-label="Добавить: ${n}${p.length > 1 ? ', размер ' + 'SML'[i] : ''}, ${pr} рублей">${p.length > 1 ? `<i>${'SML'[i]}</i>` : ''}${pr} ₽<span aria-hidden="true">+</span></button>`).join('')}</div></div>`).join('')}</div></section>`).join('');
     $$('[data-reveal]', box).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     tabs.addEventListener('click', e => {
       const b = e.target.closest('.tab'); if (!b) return;
@@ -154,6 +249,12 @@
       $('#b-price').textContent = rub(price);
       $('#b-name').textContent = [b.n, ['S', 'M', 'L'][st.size], !noMilk && st.milk !== 'cow' ? MILK[st.milk][0].toLowerCase() + ' молоко' : '', st.syr !== 'none' ? 'сироп ' + SYR[st.syr][0].toLowerCase() : '', st.shot ? 'двойной шот' : ''].filter(Boolean).join(' · ');
     }
+    $('#b-add').addEventListener('click', () => {
+      const b = BASES[st.base], noMilk = st.base === 'americano';
+      const price = b.p[st.size] + (noMilk ? 0 : MILK[st.milk][1]) + SYR[st.syr][1] + st.shot * 60;
+      const opts = [!noMilk && st.milk !== 'cow' ? MILK[st.milk][0].toLowerCase() + ' молоко' : '', st.syr !== 'none' ? 'сироп ' + SYR[st.syr][0].toLowerCase() : '', st.shot ? 'двойной шот' : ''].filter(Boolean).join(', ');
+      order.add({ ico: st.base === 'raf' ? 'raf' : st.base === 'americano' ? 'americano' : st.base === 'latte' ? 'latte' : st.base === 'flat' ? 'flat' : 'cappuccino', name: b.n, size: 'SML'[st.size], opts, price });
+    });
     function mix(a, b, t) { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const A = p(a), B = p(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); }
     render();
   }

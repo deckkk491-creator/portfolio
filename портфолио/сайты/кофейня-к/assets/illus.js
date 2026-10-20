@@ -117,7 +117,7 @@
     <g transform="translate(390 196)"><rect x="-10" y="-10" width="20" height="20" rx="5" fill="#4F7BC4"/><path d="M-4 -4h8v8h-8z" fill="#fff"/><text x="-14" y="26" text-anchor="middle" font-family="Onest,sans-serif" font-size="9.5" fill="${txt}">ост. «Протезное</text><text x="-14" y="38" text-anchor="middle" font-family="Onest,sans-serif" font-size="9.5" fill="${txt}">предприятие»</text></g>
     <circle class="pulse" cx="300" cy="238" r="12" fill="#B7743A"/>
     <g class="pin"><path d="M300 240c-11-13-17-20-17-29a17 17 0 0 1 34 0c0 9-6 16-17 29Z" fill="#B7743A"/><text x="300" y="217" text-anchor="middle" font-family="Unbounded,sans-serif" font-size="13" fill="#fff">К</text></g>
-    <rect x="322" y="246" width="96" height="26" rx="13" fill="${dark ? '#F3ECE3' : 'var(--card)'}"/><text x="370" y="263" text-anchor="middle" font-family="Onest,sans-serif" font-size="11" font-weight="600" fill="#231B16">Московская, 30а</text>
+    <rect x="322" y="246" width="96" height="26" rx="13" fill="${dark ? '#F3ECE3' : 'var(--card)'}"/><text x="370" y="263" text-anchor="middle" font-family="Onest,sans-serif" font-size="11" font-weight="600" fill="#231B16">Кофейня «К»</text>
   </svg>`;
   };
 
