@@ -12,7 +12,7 @@
 | [Дашборд продаж](projects/sales-dashboard/) | Выручка, заказы, чек и маржа по каналам и кварталам с выводами | [открыть](https://deckkk491-creator.github.io/portfolio/projects/sales-dashboard/) |
 | [ABC-анализ из выгрузки](projects/abc-report/) | Загрузил CSV — получил группы A/B/C, кривую Парето и таблицу для закупщика | [открыть](https://deckkk491-creator.github.io/portfolio/projects/abc-report/) |
 
-Данные в проектах демонстрационные. Проекты сделаны с помощью вайбкодинга (Claude), без сторонних библиотек: HTML, CSS, JavaScript.
+Данные в проектах демонстрационные. Без сторонних библиотек: HTML, CSS, JavaScript.
 
 ## Кейсы из работы
 
