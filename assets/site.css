@@ -78,7 +78,7 @@ p{margin:0}
 .why p{color:var(--muted);font-size:15px}
 
 /* проекты */
-.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:26px}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;margin-top:26px}
 .proj{display:grid;gap:10px;align-content:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
 .proj p{font-size:15px;color:var(--muted)}
 .proj .kind{color:var(--accent)}
