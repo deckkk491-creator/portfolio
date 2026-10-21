@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Цветочная подписка — Мирт</title>
 <meta name="description" content="Сезонный букет в вазу раз в неделю, две недели или месяц с доставкой по Москве.">
-<meta name="theme-color" content="#F6F1EA">
+<meta name="theme-color" content="#FCF6F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2A1F24" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='20' fill='%232F4A3A'/%3E%3Ccircle cx='20' cy='20' r='7' fill='%23F4CFC7'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/style.css">
-<script>try{var t=localStorage.getItem('mirt-theme');if(t)document.documentElement.dataset.theme=JSON.parse(t)}catch(e){}</script>
+<script>try{localStorage.removeItem('mirt-theme');var t=sessionStorage.getItem('mirt-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body data-page="subscription">
 <p class="topline">Соберём и привезём сегодня, если закажете до <b>20:00</b> · Доставка по Москве бесплатно от 7 000 ₽</p>
 <header class="site">
   <div class="wrap nav">
-    <a class="logo" href="index.html" aria-label="Мирт — на главную"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 34C14 26 20 18 31 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g fill="currentColor"><ellipse cx="14" cy="22" rx="3" ry="6.5" transform="rotate(-62 14 22)"/><ellipse cx="17" cy="27" rx="2.6" ry="5.6" transform="rotate(30 17 27)" opacity=".75"/><ellipse cx="20" cy="15" rx="2.8" ry="6" transform="rotate(-58 20 15)" opacity=".85"/><ellipse cx="24" cy="20" rx="2.4" ry="5.2" transform="rotate(36 24 20)" opacity=".6"/><ellipse cx="27" cy="9" rx="2.2" ry="4.6" transform="rotate(-50 27 9)" opacity=".75"/></g><circle cx="33" cy="6" r="2.6" fill="#B5523F"/></svg><span><b>Мирт</b><small>цветочная мастерская</small></span></a>
+    <a class="logo" href="index.html" aria-label="Мирт — на главную"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 34C14 26 20 18 31 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g fill="currentColor"><ellipse cx="14" cy="22" rx="3" ry="6.5" transform="rotate(-62 14 22)"/><ellipse cx="17" cy="27" rx="2.6" ry="5.6" transform="rotate(30 17 27)" opacity=".75"/><ellipse cx="20" cy="15" rx="2.8" ry="6" transform="rotate(-58 20 15)" opacity=".85"/><ellipse cx="24" cy="20" rx="2.4" ry="5.2" transform="rotate(36 24 20)" opacity=".6"/><ellipse cx="27" cy="9" rx="2.2" ry="4.6" transform="rotate(-50 27 9)" opacity=".75"/></g><circle cx="33" cy="6" r="2.6" fill="#E06F55"/></svg><span><b>Мирт</b><small>цветочная мастерская</small></span></a>
     <nav class="menu" aria-label="Основное меню"><a href="catalog.html">Каталог</a><a href="subscription.html" aria-current="page">Подписка</a><a href="delivery.html">Доставка</a><a href="about.html">О мастерской</a><a href="contacts.html">Контакты</a></nav>
     <div class="tools">
       <button class="icon-btn theme-btn" type="button" aria-label="Сменить тему"><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
@@ -35,7 +36,8 @@
     <h2 data-reveal style="font-size:clamp(36px,4.6vw,56px);margin-top:16px">Цветы приходят сами — вам остаётся поставить их в воду</h2>
     <ul class="checks" data-reveal>
       <li>Первая доставка — в удобный день, дальше по расписанию</li>
-      <li>Каждый раз новый букет: флорист следит, чтобы цветы не повторялись</li>
+      <li>Каждый раз новый букет: флорист следит, чтобы цветы не повторялись, и помнит, что вы любите</li>
+      <li>Оплата за каждую доставку отдельно — после того, как увидите фото букета</li>
       <li>Ваза в подарок к первой доставке на тарифе «Раз в неделю»</li>
       <li>Пауза на отпуск и отмена — одним сообщением в мессенджер</li>
     </ul>
@@ -49,24 +51,49 @@
     <div class="plan" data-reveal style="--d:.16s"><h3>Раз в две недели</h3><p class="p">4 400 ₽<small> / доставка</small></p><p class="muted">Золотая середина: букет как раз успевает отцвести.</p><ul><li>Букет 35–40 см</li><li>Сезонные цветы</li><li>Скидка 10% на другие заказы</li></ul><button class="btn ghost" type="button" data-plan="two">Выбрать</button></div>
   </div>
 </div></section>
-<section class="sec"><div class="wrap">
-  <div class="sec-head"><div><p class="eyebrow" data-reveal>Календарь сезона</p><h2 data-reveal>Что будет в ваших букетах</h2></div><p class="lead" data-reveal>Мы следуем сезону: так цветы свежее, ароматнее и честнее по цене. Текущий месяц выделен.</p></div>
-  <div class="season"><div class="month" style="--m:#E7B9A6;--d:0.00s" data-reveal><i></i><div><b>Январь</b><br><span>Ранункулюсы, анемоны, хвоя</span></div></div><div class="month" style="--m:#F2D06B;--d:0.03s" data-reveal><i></i><div><b>Февраль</b><br><span>Тюльпаны, мимоза, гиацинты</span></div></div><div class="month" style="--m:#F5B66E;--d:0.06s" data-reveal><i></i><div><b>Март</b><br><span>Тюльпаны, нарциссы, мускари</span></div></div><div class="month" style="--m:#F2C7D1;--d:0.09s" data-reveal><i></i><div><b>Апрель</b><br><span>Ранункулюсы, вишня, гиацинты</span></div></div><div class="month" style="--m:#B9A0D2;--d:0.12s" data-reveal><i></i><div><b>Май</b><br><span>Сирень, ландыши, пионы</span></div></div><div class="month" style="--m:#EAA2A8;--d:0.15s" data-reveal><i></i><div><b>Июнь</b><br><span>Пионы, садовые розы</span></div></div><div class="month" style="--m:#9DB3DB;--d:0.18s" data-reveal><i></i><div><b>Июль</b><br><span>Гортензии, дельфиниумы, ромашки</span></div></div><div class="month" style="--m:#F0C64A;--d:0.21s" data-reveal><i></i><div><b>Август</b><br><span>Подсолнухи, астры, лизиантус</span></div></div><div class="month" style="--m:#D9776A;--d:0.24s" data-reveal><i></i><div><b>Сентябрь</b><br><span>Георгины, хризантемы</span></div></div><div class="month" style="--m:#C98B6B;--d:0.27s" data-reveal><i></i><div><b>Октябрь</b><br><span>Гортензии, кустовые розы</span></div></div><div class="month" style="--m:#A7907A;--d:0.30s" data-reveal><i></i><div><b>Ноябрь</b><br><span>Сухоцветы, эвкалипт, ягоды</span></div></div><div class="month" style="--m:#8FA999;--d:0.33s" data-reveal><i></i><div><b>Декабрь</b><br><span>Амариллисы, хвоя, ветки хлопка</span></div></div></div>
+<section class="sec" id="season"><div class="wrap">
+  <div class="sec-head"><div><p class="eyebrow" data-reveal>Календарь сезона</p><h2 data-reveal>Соберите свои букеты</h2></div><p class="lead" data-reveal>Мы следуем сезону: так цветы свежее, ароматнее и честнее по цене. Отметьте любимые цветы, вычеркните ненужные и пропустите месяцы, когда букет не нужен, — флорист учтёт это в каждой доставке.</p></div>
+  <div class="prefs" data-reveal>
+    <div class="prefs-row">
+      <div class="prefs-mode" role="group" aria-label="Что делать при нажатии на цветок">
+        <button type="button" data-mode="love" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17s-6.5-3.9-6.5-8.6A3.6 3.6 0 0 1 10 6.3a3.6 3.6 0 0 1 6.5 2.1C16.5 13.1 10 17 10 17Z" fill="currentColor"/></svg>Выделить любимые</button>
+        <button type="button" data-mode="no" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.5 5.5l9 9m0-9-9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Вычеркнуть ненужное</button>
+      </div>
+      <p class="prefs-tip" id="prefs-tip">Нажмите на цветок в календаре — он станет любимым. Нажмите ещё раз, чтобы снять отметку.</p>
+      <button type="button" class="link prefs-reset" id="prefs-reset">Сбросить всё</button>
+    </div>
+    <div class="prefs-grid">
+      <div><h3>Аллергия и запахи</h3><p class="muted">Цветы из этих групп не попадут в букет — и в календаре их сразу видно.</p><div class="tags" id="allergens"></div></div>
+      <div><h3>Гамма</h3><p class="muted">Какое настроение ближе.</p><div class="tags" id="palette"></div></div>
+      <div><h3>Никогда не привозить</h3><p class="muted">То, чего нет в календаре: например, лилии, гвоздики или каллы.</p><div class="never"><input id="never-in" placeholder="Например, лилии" aria-label="Цветок, который не привозить"><button class="btn sm" type="button" id="never-add">Добавить</button></div><div class="tags" id="never-list"></div></div>
+    </div>
+  </div>
+  <div class="season" id="season-grid"></div>
+  <p class="season-legend"><span><i class="lg love"></i>любимые — положим чаще</span><span><i class="lg no"></i>не привозим</span><span><i class="lg alg"></i>убрали из-за аллергии</span><span><i class="lg skip"></i>месяц пропускаем</span></p>
 </div></section>
 <section class="sec tight" id="sub-form"><div class="wrap split" style="align-items:start">
-  <div><p class="eyebrow">Оформление</p><h2 style="font-size:clamp(36px,4.6vw,56px);margin:16px 0 18px">Оформить подписку</h2><p class="lead">Оставьте контакты — флорист перезвонит, уточнит пожелания по цветам и согласует день первой доставки. Оплата — после первой доставки.</p>
+  <div><p class="eyebrow">Оформление</p><h2 style="font-size:clamp(36px,4.6vw,56px);margin:16px 0 18px">Оформить подписку</h2><p class="lead">Оставьте контакты — флорист перезвонит, уточнит пожелания и согласует день первой доставки. Заранее платить ничего не нужно.</p>
+    <ol class="pay-steps">
+      <li><b>Собираем букет</b><span>В день доставки флорист собирает его из утренних цветов — с учётом ваших пожеланий.</span></li>
+      <li><b>Присылаем фото</b><span>Вы видите букет до отправки. Если что-то не так — поправим.</span></li>
+      <li><b>Вы оплачиваете</b><span>По ссылке картой или через СБП, прямо в мессенджере.</span></li>
+      <li><b>Курьер выезжает</b><span>Сразу после оплаты. Позвонит за час до приезда.</span></li>
+    </ol>
     <div class="acc sm" style="margin-top:30px">
-      <details><summary>Можно ли выбрать цветы?</summary><div class="body">Да. Скажите, что любите и чего не стоит присылать — например, лилии из-за запаха. Флорист учтёт это в каждом букете.</div></details>
+      <details><summary>Как платить дальше?</summary><div class="body">Так же, за каждую доставку отдельно: фото букета — оплата — курьер. Никаких списаний без вашего ведома, пауза и отмена — одним сообщением.</div></details>
+      <details><summary>Можно ли поменять пожелания потом?</summary><div class="body">Да, в любой момент. Напишите флористу, что добавить в любимые или убрать, — со следующей доставки букеты будут уже такими.</div></details>
       <details><summary>Что если меня не будет дома?</summary><div class="body">Курьер позвонит за час. Можно перенести доставку, оставить букет консьержу или соседям — как вам удобнее.</div></details>
       <details><summary>Можно подарить подписку?</summary><div class="body">Конечно. Оформите её на адрес получателя, а мы приложим к первому букету открытку с вашим текстом.</div></details>
     </div>
   </div>
-  <div class="panel"><form class="form" data-demo data-title="Подписка оформлена" data-text="Флорист перезвонит в течение 15 минут. Это демонстрационный сайт — заявка никуда не отправлена." novalidate>
+  <div class="panel"><form class="form" data-demo data-title="Подписка оформлена" data-text="Флорист перезвонит в течение 15 минут и уточнит ваши пожелания. Платить сейчас ничего не нужно. Это демонстрационный сайт — заявка никуда не отправлена." novalidate>
     <div class="field"><label for="plan">Тариф</label><select id="plan"><option value="week">Раз в неделю — 3 900 ₽</option><option value="two">Раз в две недели — 4 400 ₽</option><option value="month">Раз в месяц — 4 900 ₽</option></select></div>
     <div class="two"><div class="field"><label for="s-name">Имя</label><input id="s-name" autocomplete="name" required><span class="msg">Как к вам обращаться?</span></div>
     <div class="field"><label for="s-phone">Телефон</label><input id="s-phone" type="tel" placeholder="+7 (___) ___-__-__" required><span class="msg">Проверьте номер</span></div></div>
     <div class="field"><label for="s-addr">Адрес доставки</label><input id="s-addr" placeholder="Улица, дом, квартира" required><span class="msg">Укажите адрес</span></div>
     <div class="field"><label for="s-day">Удобный день</label><select id="s-day"><option>Понедельник</option><option>Среда</option><option selected>Пятница</option><option>Суббота</option></select></div>
+    <div class="wish" id="wish"><div class="wish-head"><b>Пожелания к букетам</b><a class="link" href="#season">изменить</a></div><div id="wish-body"></div></div>
+    <div class="field"><label for="s-note">Комментарий флористу</label><textarea id="s-note" rows="3" placeholder="Например, поменьше зелени, побольше нежных оттенков"></textarea></div>
     <button class="btn block" type="submit">Оформить подписку <svg class="arr" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   </form></div>
 </div></section>
@@ -75,7 +102,7 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <a class="logo" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 34C14 26 20 18 31 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g fill="currentColor"><ellipse cx="14" cy="22" rx="3" ry="6.5" transform="rotate(-62 14 22)"/><ellipse cx="17" cy="27" rx="2.6" ry="5.6" transform="rotate(30 17 27)" opacity=".75"/><ellipse cx="20" cy="15" rx="2.8" ry="6" transform="rotate(-58 20 15)" opacity=".85"/><ellipse cx="24" cy="20" rx="2.4" ry="5.2" transform="rotate(36 24 20)" opacity=".6"/><ellipse cx="27" cy="9" rx="2.2" ry="4.6" transform="rotate(-50 27 9)" opacity=".75"/></g><circle cx="33" cy="6" r="2.6" fill="#B5523F"/></svg><span><b>Мирт</b><small>цветочная мастерская</small></span></a>
+        <a class="logo" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 34C14 26 20 18 31 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g fill="currentColor"><ellipse cx="14" cy="22" rx="3" ry="6.5" transform="rotate(-62 14 22)"/><ellipse cx="17" cy="27" rx="2.6" ry="5.6" transform="rotate(30 17 27)" opacity=".75"/><ellipse cx="20" cy="15" rx="2.8" ry="6" transform="rotate(-58 20 15)" opacity=".85"/><ellipse cx="24" cy="20" rx="2.4" ry="5.2" transform="rotate(36 24 20)" opacity=".6"/><ellipse cx="27" cy="9" rx="2.2" ry="4.6" transform="rotate(-50 27 9)" opacity=".75"/></g><circle cx="33" cy="6" r="2.6" fill="#E06F55"/></svg><span><b>Мирт</b><small>цветочная мастерская</small></span></a>
         <p class="about">Собираем букеты вручную из цветов, которые пришли утром. Привозим по Москве за 2 часа и присылаем фото до отправки.</p>
       </div>
       <div><h4>Магазин</h4><ul><li><a href="catalog.html">Каталог букетов</a></li><li><a href="catalog.html?price=low">Букеты до 5 000 ₽</a></li><li><a href="subscription.html">Цветочная подписка</a></li><li><a href="cart.html">Корзина</a></li></ul></div>

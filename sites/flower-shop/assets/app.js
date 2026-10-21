@@ -15,12 +15,19 @@
   document.documentElement.classList.remove('no-js');
 
   /* ——— Тема ——— */
+  /* По умолчанию — как на устройстве. Ручной выбор действует до закрытия вкладки,
+     а смена темы в системе сразу перекрашивает сайт. */
+  const sysDark = matchMedia('(prefers-color-scheme: dark)');
+  const root = document.documentElement;
+  const saveTheme = t => { try { t ? sessionStorage.setItem('mirt-theme', t) : sessionStorage.removeItem('mirt-theme'); } catch (e) {} };
   $$('.theme-btn').forEach(b => b.addEventListener('click', () => {
-    const root = document.documentElement;
-    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-    root.dataset.theme = dark ? 'light' : 'dark';
-    store.set('mirt-theme', root.dataset.theme);
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : sysDark.matches;
+    const next = dark ? 'light' : 'dark';
+    if ((next === 'dark') === sysDark.matches) { delete root.dataset.theme; saveTheme(null); }
+    else { root.dataset.theme = next; saveTheme(next); }
   }));
+  const onSys = () => { delete root.dataset.theme; saveTheme(null); };
+  sysDark.addEventListener ? sysDark.addEventListener('change', onSys) : sysDark.addListener(onSys);
 
   /* ——— Шапка и меню ——— */
   const header = $('header.site');
@@ -272,7 +279,7 @@
       const ok = $('#promo').value.trim().toUpperCase() === 'МИРТ10';
       promo = promo || ok; store.set('mirt-promo', promo);
       $('#promo-msg').textContent = ok ? 'Промокод применён: −10%' : 'Такого промокода нет. Попробуйте МИРТ10';
-      $('#promo-msg').style.color = ok ? 'var(--moss)' : 'var(--accent)';
+      $('#promo-msg').style.color = ok ? 'var(--good)' : 'var(--accent)';
       render();
     });
     const d = $('#date'); if (d) { const t = new Date(); d.min = t.toISOString().slice(0, 10); d.value = d.min; }
@@ -290,7 +297,101 @@
   if (page === 'subscription') {
     $('#vase').innerHTML = B.bouquet(D.vase, { sway: true });
     const m = new Date().getMonth();
-    $$('.month').forEach((el, i) => el.classList.toggle('now', i === m));
+    const MONTHS = [
+      ['Январь', '#E7B9A6', ['Ранункулюсы', 'Анемоны', 'Хвоя', 'Эвкалипт']],
+      ['Февраль', '#F2D06B', ['Тюльпаны', 'Мимоза', 'Гиацинты']],
+      ['Март', '#F5B66E', ['Тюльпаны', 'Нарциссы', 'Мускари']],
+      ['Апрель', '#F2C7D1', ['Ранункулюсы', 'Ветки вишни', 'Гиацинты']],
+      ['Май', '#B9A0D2', ['Сирень', 'Ландыши', 'Пионы']],
+      ['Июнь', '#EAA2A8', ['Пионы', 'Садовые розы']],
+      ['Июль', '#9DB3DB', ['Гортензии', 'Дельфиниумы', 'Ромашки']],
+      ['Август', '#F0C64A', ['Подсолнухи', 'Астры', 'Лизиантус']],
+      ['Сентябрь', '#D9776A', ['Георгины', 'Хризантемы']],
+      ['Октябрь', '#C98B6B', ['Гортензии', 'Кустовые розы']],
+      ['Ноябрь', '#A7907A', ['Сухоцветы', 'Эвкалипт', 'Ягоды']],
+      ['Декабрь', '#8FA999', ['Амариллисы', 'Хвоя', 'Ветки хлопка']]
+    ];
+    const ALLERGENS = [
+      ['pollen', 'Пыльца сложноцветных', ['Ромашки', 'Астры', 'Подсолнухи', 'Хризантемы', 'Георгины']],
+      ['mimosa', 'Мимоза', ['Мимоза']],
+      ['scent', 'Сильный аромат', ['Гиацинты', 'Сирень', 'Ландыши', 'Нарциссы']],
+      ['oils', 'Эфирные масла', ['Эвкалипт', 'Хвоя']],
+      ['dust', 'Пыль сухоцветов', ['Сухоцветы', 'Ветки хлопка']],
+      ['lily', 'Лилии', []]
+    ];
+    const PALETTE = ['Нежная пастель', 'Ярко и сочно', 'Белое и зелень', 'Глубокие винные', 'На вкус флориста'];
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const P = Object.assign({ love: [], no: [], alg: [], skip: [], pal: 'На вкус флориста', never: [] }, store.get('mirt-sub-prefs', {}));
+    let mode = 'love';
+    const algOf = f => ALLERGENS.filter(a => P.alg.includes(a[0]) && a[2].includes(f));
+    const stateOf = f => algOf(f).length ? 'alg' : P.no.includes(f) ? 'no' : P.love.includes(f) ? 'love' : '';
+    const grid = $('#season-grid');
+    grid.innerHTML = MONTHS.map(([name, c, fl], i) => `<div class="month${i === m ? ' now' : ''}" style="--m:${c}" data-i="${i}">
+      <div class="m-top"><i></i><button type="button" class="m-skip" aria-pressed="false" title="Пропустить месяц">пропустить</button></div>
+      <b>${name}</b><div class="fl">${fl.map(f => `<button type="button" class="f" data-f="${esc(f)}">${esc(f)}</button>`).join('')}</div>
+      <p class="m-note"></p></div>`).join('');
+    $('#allergens').innerHTML = ALLERGENS.map(a => `<button type="button" class="tag" data-alg="${a[0]}" aria-pressed="false">${a[1]}</button>`).join('');
+    $('#palette').innerHTML = PALETTE.map(p => `<button type="button" class="tag" data-pal="${esc(p)}" aria-pressed="false">${p}</button>`).join('');
+    const TIP = { love: 'Нажмите на цветок в календаре — он станет любимым. Нажмите ещё раз, чтобы снять отметку.', no: 'Нажмите на цветок, который не нужно привозить, — он будет вычеркнут во всех месяцах.' };
+    function render() {
+      $$('.f', grid).forEach(b => {
+        const st = stateOf(b.dataset.f);
+        b.dataset.st = st;
+        const lbl = { love: 'любимый', no: 'не привозить', alg: 'аллерген' }[st];
+        b.setAttribute('aria-label', b.dataset.f + (lbl ? ', ' + lbl : ''));
+      });
+      $$('.month', grid).forEach(el => {
+        const i = +el.dataset.i, skip = P.skip.includes(i);
+        el.classList.toggle('skipped', skip);
+        $('.m-skip', el).setAttribute('aria-pressed', skip);
+        $('.m-skip', el).textContent = skip ? 'вернуть' : 'пропустить';
+        const fl = MONTHS[i][2], left = fl.filter(f => !['no', 'alg'].includes(stateOf(f)));
+        $('.m-note', el).textContent = skip ? 'Букетов не будет' : !left.length ? 'Флорист подберёт замену' : '';
+      });
+      $$('[data-alg]').forEach(b => b.setAttribute('aria-pressed', P.alg.includes(b.dataset.alg)));
+      $$('[data-pal]').forEach(b => b.setAttribute('aria-pressed', P.pal === b.dataset.pal));
+      $('#never-list').innerHTML = P.never.map((n, i) => `<button type="button" class="tag on" data-never="${i}" aria-label="Убрать: ${esc(n)}">${esc(n)} <span aria-hidden="true">×</span></button>`).join('');
+      const months = P.skip.slice().sort((a, b) => a - b).map(i => MONTHS[i][0].toLowerCase());
+      const noList = [...new Set([...P.no, ...ALLERGENS.filter(a => P.alg.includes(a[0])).flatMap(a => a[2].length ? a[2] : [a[1]]), ...P.never])];
+      const rows = [
+        P.love.length && ['Любимые', P.love.join(', ')],
+        noList.length && ['Не привозим', noList.join(', ').toLowerCase()],
+        months.length && ['Пропускаем', months.join(', ')],
+        P.pal !== 'На вкус флориста' && ['Гамма', P.pal.toLowerCase()]
+      ].filter(Boolean);
+      $('#wish-body').innerHTML = rows.length ? rows.map(r => `<p><span>${r[0]}</span>${esc(r[1])}</p>`).join('') : '<p class="muted">Пока без пожеланий — флорист соберёт на свой вкус. Отметить любимые цветы можно в календаре выше.</p>';
+      store.set('mirt-sub-prefs', P);
+    }
+    const toggle = (arr, v) => { const i = arr.indexOf(v); i < 0 ? arr.push(v) : arr.splice(i, 1); };
+    $$('[data-mode]').forEach(b => b.addEventListener('click', () => {
+      mode = b.dataset.mode;
+      $$('[data-mode]').forEach(x => x.setAttribute('aria-pressed', x === b));
+      $('#prefs-tip').textContent = TIP[mode];
+    }));
+    grid.addEventListener('click', e => {
+      const sk = e.target.closest('.m-skip');
+      if (sk) { toggle(P.skip, +sk.closest('.month').dataset.i); return render(); }
+      const b = e.target.closest('.f'); if (!b) return;
+      const f = b.dataset.f;
+      if (algOf(f).length) { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); return; }
+      const own = mode === 'love' ? P.love : P.no, other = mode === 'love' ? P.no : P.love;
+      if (other.includes(f)) toggle(other, f);
+      toggle(own, f);
+      b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+      render();
+    });
+    $('#allergens').addEventListener('click', e => { const b = e.target.closest('[data-alg]'); if (b) { toggle(P.alg, b.dataset.alg); render(); } });
+    $('#palette').addEventListener('click', e => { const b = e.target.closest('[data-pal]'); if (b) { P.pal = b.dataset.pal; render(); } });
+    const addNever = () => {
+      const inp = $('#never-in'), v = inp.value.trim().replace(/\s+/g, ' ');
+      if (v && !P.never.some(x => x.toLowerCase() === v.toLowerCase())) P.never.push(v.slice(0, 40));
+      inp.value = ''; render(); inp.focus();
+    };
+    $('#never-add').addEventListener('click', addNever);
+    $('#never-in').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addNever(); } });
+    $('#never-list').addEventListener('click', e => { const b = e.target.closest('[data-never]'); if (b) { P.never.splice(+b.dataset.never, 1); render(); } });
+    $('#prefs-reset').addEventListener('click', () => { Object.assign(P, { love: [], no: [], alg: [], skip: [], pal: 'На вкус флориста', never: [] }); render(); });
+    render();
     $$('[data-plan]').forEach(b => b.addEventListener('click', () => {
       const sel = $('#plan'); sel.value = b.dataset.plan;
       $('#sub-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
