@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Меню — кофейня «К», Тамбов</title>
+<meta name="description" content="Кофе, авторские напитки, чай, какао, круассаны, сэндвичи и десерты кофейни «К». Конструктор напитка.">
+<meta name="theme-color" content="#FAF7F2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23231B16'/%3E%3Ctext x='20' y='28' text-anchor='middle' font-family='Arial' font-size='22' fill='%23FAF7F2'%3EК%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500&family=Onest:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('k-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<header class="site"><div class="wrap nav">
+  <a class="logo" href="index.html" aria-label="Кофейня «К» — на главную"><b class="mark">К</b><span>кофейня<small>Тамбов</small></span></a>
+  <nav class="menu" aria-label="Основное меню"><a href="index.html">Главная</a><a href="menu.html" aria-current="page">Меню</a><a href="about.html">О кофейне</a><a href="contacts.html">Как добраться</a></nav>
+  <span class="status"><i></i>8:00–19:00</span>
+  <button class="btn sm order-open" type="button">Заказать онлайн</button>
+  <button class="icon-btn theme-btn" type="button" aria-label="Сменить тему"><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+  <button class="icon-btn burger" type="button" aria-label="Меню" aria-expanded="false"><span></span></button>
+</div></header>
+<main>
+<section class="page-head"><div class="sunlight" aria-hidden="true"><i></i><i></i><i></i></div><div class="wrap"><p class="eyebrow">Меню</p><h1>Кофе, чай <b>и выпечка</b></h1><p class="lead">Классика, авторские напитки и свежая выпечка. А ещё можно собрать свой напиток — внизу страницы.</p></div></section>
+<div class="tabs"><div class="wrap"><div class="row" id="tabs" role="tablist" aria-label="Разделы меню"></div></div></div>
+<div class="wrap">
+  <div class="note" style="margin-bottom:44px"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Нажмите на цену, чтобы добавить напиток в заказ, и заберите его без очереди. Это концепт-сайт: меню и цены ориентировочные, заказ кофейне не отправляется.</span></div>
+  <div id="menu"></div>
+  <section class="menu-group"><h2>Добавки</h2><p>К любому напитку.</p><div class="extras"><span>Альтернативное молоко<b>+60 ₽</b></span><span>Сироп<b>+40 ₽</b></span><span>Дополнительный шот<b>+60 ₽</b></span><span>Сливки<b>+40 ₽</b></span><span>Кофе с собой<b>бесплатно</b></span></div></section>
+  <section class="menu-group" id="build">
+    <h2>Собрать напиток</h2><p>Выберите основу, размер и добавки — посмотрите, как будет выглядеть стакан и сколько он стоит.</p>
+    <div class="builder" id="builder">
+      <div class="glass-wrap"><svg id="glass" viewBox="0 0 200 260" aria-hidden="true">
+        <ellipse cx="100" cy="246" rx="62" ry="8" fill="#000" opacity=".07"/>
+        <g class="glass-body">
+          <clipPath id="gclip"><path d="M40 30h120l-12 200H52Z"/></clipPath>
+          <g clip-path="url(#gclip)"><rect class="layer" x="0" width="200" style="y:230px;height:0"/><rect class="layer" x="0" width="200" style="y:230px;height:0"/><rect class="layer" x="0" width="200" style="y:230px;height:0"/></g>
+          <path d="M40 30h120l-12 200H52Z" fill="none" stroke="#CDBFAF" stroke-width="3"/>
+          <path d="M54 44l-6 150" stroke="#fff" stroke-width="5" opacity=".55" stroke-linecap="round"/>
+          <text x="100" y="150" text-anchor="middle" font-family="Unbounded,sans-serif" font-size="30" fill="#fff" opacity=".7">К</text>
+        </g></svg></div>
+      <div>
+        <div class="opt"><p class="lbl">Основа</p><div class="seg" id="b-base"></div></div>
+        <div class="opt"><p class="lbl">Размер, мл</p><div class="seg" id="b-size"></div></div>
+        <div class="opt"><p class="lbl">Молоко</p><div class="seg" id="b-milk"></div></div>
+        <div class="opt"><p class="lbl">Сироп</p><div class="seg" id="b-syr"></div></div>
+        <div class="opt"><p class="lbl">Крепость</p><div class="seg" id="b-shot"></div></div>
+        <div class="total"><span id="b-name"></span><b id="b-price"></b></div>
+        <button class="btn" id="b-add" type="button" style="margin-top:18px;width:100%">Добавить в заказ</button>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+<footer class="site"><div class="wrap">
+  <div class="fgrid">
+    <div><a class="logo" href="index.html"><b class="mark">К</b><span>кофейня<small>Тамбов</small></span></a><p class="about">Маленькая светлая кофейня на Московской: кофе, свежая выпечка и книги на полках.</p></div>
+    <div><h4>Сайт</h4><ul><li><a href="menu.html">Меню и онлайн-заказ</a></li><li><a href="menu.html#build">Собрать напиток</a></li><li><a href="about.html">О кофейне</a></li><li><a href="contacts.html">Как добраться</a></li></ul></div>
+    <div><h4>Режим работы</h4><ul><li>Ежедневно</li><li>8:00–19:00</li><li>без выходных</li></ul></div>
+    <div><h4>Связаться</h4><ul><li><a href="https://wa.me/79106537168" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="https://vk.com/club224374007" target="_blank" rel="noopener">ВКонтакте</a></li><li><a href="https://2gis.ru/tambov/firm/70000001083613209/tab/reviews" target="_blank" rel="noopener">Отзывы в 2ГИС</a></li><li><a href="contacts.html#book">Забронировать столик</a></li></ul></div>
+  </div>
+  <p class="fbig" aria-hidden="true">К·кофе</p>
+  <div class="fbottom"><span>Неофициальный концепт-сайт для портфолио. Адрес и часы — из открытой карточки 2ГИС, меню и цены условные.</span><a href="../../index.html">Сделал Никита Белосохов</a></div>
+</div></footer>
+<script src="assets/illus.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
