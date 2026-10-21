@@ -99,6 +99,7 @@ td.n,th.n{text-align:right;white-space:nowrap;font-family:var(--mono);font-varia
 .exp{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;margin-top:22px}
 .jobs{display:grid;gap:12px}
 .jobs p{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px}
+.jobs p.more{display:block;font:13px var(--mono)}
 .jobs span{font:13px var(--mono);color:var(--muted);padding-top:2px}
 .lbl{margin:0 0 8px}
 .lbl+.tags{margin-bottom:18px}
@@ -137,3 +138,25 @@ svg text{fill:var(--muted);font:11px var(--mono)}
   .jobs p{grid-template-columns:1fr;gap:0}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* кейсы: ситуация → действия → инструменты → результат */
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;margin-top:26px}
+.case{display:grid;grid-template-rows:auto 1fr auto;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+.case header{display:grid;gap:4px}
+.case .kind{color:var(--accent)}
+.case dl{margin:0;display:grid;gap:8px;align-content:start}
+.case dt{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.case dd{margin:-4px 0 0;font-size:15px}
+.case .res{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;border-top:1px solid var(--line);padding-top:12px}
+.case .res b{font:600 19px var(--mono);color:var(--good);font-variant-numeric:tabular-nums}
+.case .res span{font-size:13px;color:var(--muted)}
+
+/* сайты — второстепенный блок */
+.sites{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--line)}
+.sites li{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr) auto;gap:6px 20px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line)}
+.sites li>a:first-child{font-weight:600;text-decoration:none}
+.sites li>a:first-child:hover{text-decoration:underline}
+.sites span{color:var(--muted);font-size:15px}
+.sites .code{font:13px var(--mono);color:var(--muted)}
+.task .ev a + a{margin-top:-2px}
+@media (max-width:640px){.sites li{grid-template-columns:1fr auto}.sites span{grid-column:1/-1;grid-row:2}}
