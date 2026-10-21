@@ -210,22 +210,21 @@ header.site.scrolled{border-bottom-color:var(--line)}
 @media (max-width:900px){.quotes{grid-template-columns:1fr}.q.wide{grid-column:auto}}
 
 /* визит */
-.visit{display:grid;grid-template-columns:1fr 1fr;border-radius:calc(var(--r) + 8px);overflow:hidden;background:var(--ink);color:var(--milk)}
+.visit{--v-bg:var(--ink);--v-fg:var(--milk);--v-map:#2E241E;display:grid;grid-template-columns:1fr 1fr;border-radius:calc(var(--r) + 8px);overflow:hidden;background:var(--v-bg);color:var(--v-fg)}
+:root[data-theme="dark"] .visit{--v-bg:#33271F;--v-fg:#F6EEE4;--v-map:#2A211B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .visit{--v-bg:#33271F;--v-fg:#F6EEE4;--v-map:#2A211B}}
 .visit .txt{padding:clamp(28px,5vw,64px)}
 .visit h2{font-size:clamp(32px,4.2vw,54px);font-weight:300}
 .visit h2 b{font-weight:500;color:var(--caramel-2)}
 .visit dl{margin:28px 0 32px;display:grid;grid-template-columns:auto 1fr;gap:14px 26px;font-size:15px}
-.visit dt{color:color-mix(in srgb,var(--milk) 55%,transparent)}
+.visit dt{color:color-mix(in srgb,var(--v-fg) 62%,transparent)}
 .visit dd{margin:0}
-.visit .btn{background:var(--milk);color:var(--ink);border-color:var(--milk)}
+.visit .btn{background:var(--v-fg);color:var(--v-bg);border-color:var(--v-fg)}
 .visit .btn:hover{background:var(--caramel);border-color:var(--caramel);color:#fff}
-.visit .btn.ghost{background:transparent;color:var(--milk)}
-.visit .btn.ghost:hover{background:var(--milk);color:var(--ink)}
-.visit .map{position:relative;min-height:360px;background:#2E241E}
+.visit .btn.ghost{background:transparent;color:var(--v-fg);border-color:color-mix(in srgb,var(--v-fg) 70%,transparent)}
+.visit .btn.ghost:hover{background:var(--v-fg);color:var(--v-bg);border-color:var(--v-fg)}
+.visit .map{position:relative;min-height:360px;background:var(--v-map)}
 .visit .map svg{position:absolute;inset:0;width:100%;height:100%}
-:root[data-theme="dark"] .visit,:root[data-theme="dark"] .visit .map{background:#2A211B}
-:root[data-theme="dark"] .visit{color:#F3ECE3}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .visit{background:#2A211B;color:#F3ECE3}}
 @media (max-width:900px){.visit{grid-template-columns:1fr}.visit .map{min-height:280px}}
 .pin{transform-box:fill-box;transform-origin:50% 100%;animation:pin 2.4s var(--out) infinite}
 @keyframes pin{50%{transform:translateY(-7px)}}
@@ -423,3 +422,60 @@ body.leaving main{opacity:0;transform:translateY(-6px);transition:opacity .25s,t
 .toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:70;transform:translate(-50%,30px);opacity:0;pointer-events:none;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:16px;padding:10px 10px 10px 16px;display:flex;gap:14px;align-items:center;font-size:14px;font-weight:500;transition:opacity .35s,transform .45s var(--out);max-width:calc(100vw - 32px);white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .toast button{border:0;background:var(--ink);color:var(--milk);border-radius:10px;padding:8px 12px;font-weight:600;font-size:13px}
+
+/* ——— Фото из Telegram-канала кофейни ——— */
+.drink .pic.photo{aspect-ratio:4/5;background:var(--foam);position:relative}
+.drink .pic.photo img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--out)}
+.drink:hover .pic.photo img{transform:scale(1.05)}
+.drink .pic.photo::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,transparent 60%,rgba(60,30,10,.12));pointer-events:none}
+.drink .badge{z-index:2}
+
+.sec.tg{background:radial-gradient(120% 80% at 85% 0%,color-mix(in srgb,var(--caramel-2) 22%,transparent),transparent 60%),var(--milk);overflow:hidden}
+.tg-strip{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  padding:6px max(16px,calc((100vw - 1200px)/2 + 40px)) 18px;scroll-padding-inline:max(16px,calc((100vw - 1200px)/2 + 40px))}
+.tg-strip::-webkit-scrollbar{display:none}
+.tg-strip:focus-visible{outline:2px solid var(--caramel);outline-offset:-2px}
+.tg-card{flex:none;width:clamp(210px,24vw,270px);margin:0;scroll-snap-align:start;position:relative;border-radius:22px;overflow:hidden;background:var(--foam);aspect-ratio:3/4;box-shadow:var(--shadow);
+  transition:transform .6s var(--out)}
+.tg-card:nth-child(odd){transform:rotate(-1.2deg)}
+.tg-card:nth-child(even){transform:rotate(1deg) translateY(10px)}
+.tg-card:hover{transform:rotate(0) translateY(-6px)}
+.tg-card img{width:100%;height:100%;object-fit:cover}
+.tg-card figcaption{position:absolute;left:10px;right:10px;bottom:10px;padding:10px 14px;border-radius:14px;background:color-mix(in srgb,var(--milk) 88%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;flex-direction:column;line-height:1.25}
+.tg-card figcaption b{font-weight:600;font-size:15px}
+.tg-card figcaption span{font-size:12.5px;color:var(--ink-soft)}
+.tg-more{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:26px;background:linear-gradient(160deg,var(--caramel-2),var(--caramel));color:#fff;transform:rotate(1deg) translateY(10px)}
+.tg-more .tg-ico{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;margin-bottom:6px}
+.tg-more .tg-ico svg{width:28px;height:28px}
+.tg-more b{font:500 24px/1.1 var(--f-display);letter-spacing:-.02em}
+.tg-more span{font-size:14px;opacity:.9}
+.tg-more i{font-style:normal;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;margin-top:10px}
+.tg-more i svg{width:16px;height:16px}
+:root[data-theme="dark"] .tg-more{color:#231B16}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tg-more{color:#231B16}}
+
+.duo{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;max-width:540px;width:100%;justify-self:center}
+.duo img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:calc(var(--r) + 2px);box-shadow:var(--shadow)}
+.duo img:nth-child(2){margin-top:40px}
+.duo.tilt img:first-child{transform:rotate(-1.5deg)}
+.duo.tilt img:nth-child(2){transform:rotate(1.5deg)}
+.split.rev>:first-child{order:0}
+.ph-frame{margin:0;padding:12px 12px 44px;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);transform:rotate(1.5deg);transition:transform .6s var(--out);position:relative}
+.ph-frame:hover{transform:rotate(0)}
+.ph-frame img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:10px}
+.ph-frame::after{content:"сделано с любовью ♡";position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:13px;color:var(--ink-mute)}
+
+.item .ico.ph{overflow:hidden;padding:0}
+.item .ico.ph img{width:100%;height:100%;object-fit:cover}
+.vit-wrap{margin-top:26px}
+.vit-note{font-size:14px;color:var(--ink-soft);margin-bottom:16px}
+.vitrine{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.vitrine figure{margin:0;position:relative;border-radius:18px;overflow:hidden;aspect-ratio:3/4;background:var(--foam)}
+.vitrine img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--out)}
+.vitrine figure:hover img{transform:scale(1.05)}
+.vitrine figcaption{position:absolute;left:8px;right:8px;bottom:8px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,var(--milk) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);line-height:1.25;display:flex;flex-direction:column}
+.vitrine figcaption b{font-size:14px;font-weight:600}
+.vitrine figcaption span{font-size:12px;color:var(--ink-soft)}
+@media (max-width:760px){.vitrine{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){.tg-card,.tg-card:nth-child(n),.duo.tilt img,.ph-frame{transform:none}}

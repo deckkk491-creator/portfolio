@@ -145,44 +145,52 @@
   renderOrder();
 
   /* ——— Меню ——— */
+  /* Напитки и цены — из меню в Telegram-канале кофейни (@kkkkofe). Объёмы: S 250 · M 350 · L 450 мл. */
   const MENU = [
-    { id: 'coffee', name: 'Кофе', note: 'Эспрессо на свежеобжаренной арабике. Объём: S 250 · M 350 · L 450 мл.', items: [
-      ['espresso', 'Эспрессо', 'Плотный, с карамельной сладостью', [150]],
-      ['americano', 'Американо', 'Эспрессо и горячая вода', [170, 210]],
-      ['cappuccino', 'Капучино', 'Классика с плотной молочной пеной', [200, 240, 280], 1],
-      ['latte', 'Латте', 'Больше молока, мягкий вкус', [220, 260, 300]],
-      ['flat', 'Флэт уайт', 'Двойной эспрессо и немного молока', [250]],
-      ['raf', 'Раф', 'Взбитый со сливками и ванильным сахаром', [260, 300, 340]],
-      ['iced', 'Айс-латте', 'Холодный, со льдом', [280]]
+    { id: 'coffee', name: 'Кофе', note: 'Классические кофейные. Горячие напитки готовим 60–65 °C — если любите погорячее, скажите бариста.', items: [
+      ['espresso', 'Эспрессо', '36 мл, плотный и сладковатый', { '': 120 }],
+      ['americano', 'Американо', 'Эспрессо и горячая вода', { S: 130, M: 160, L: 180 }],
+      ['cappuccino', 'Капучино', 'Классика с плотной молочной пеной', { S: 140, M: 200, L: 260 }, 1],
+      ['latte', 'Латте', 'Больше молока, мягкий вкус', { M: 200, L: 240 }],
+      ['flat', 'Флэт уайт', 'Двойной эспрессо и немного молока', { S: 180, L: 260 }],
+      ['raf', 'Раф', 'Взбитый со сливками', { M: 260, L: 310 }]
     ] },
-    { id: 'author', name: 'Авторские', note: 'То, за чем возвращаются гости.', items: [
-      ['cheese', 'Сырный латте', 'Нежная сырная пенка и капля соли', [300, 340], 1],
-      ['lavender', 'Лавандовый раф', 'Сливочный, с лавандовым сиропом', [320, 360]],
-      ['latte', 'Пряный латте', 'Корица, кардамон, мускатный орех', [290, 330]],
-      ['matcha', 'Матча-латте', 'Японский зелёный чай с молоком', [290]]
+    { id: 'cold', name: 'Со льдом', note: 'Холодные напитки, 350 мл.', items: [
+      ['iced', 'Айс-латте', 'Эспрессо, молоко и много льда', { M: 200 }],
+      ['iced', 'Бамбл', 'Свежевыжатый апельсин, карамель и эспрессо', { M: 330 }, 1, 'oranges'],
+      ['iced', 'Эспрессо-тоник', 'Тоник, лёд и шот эспрессо сверху', { M: 230 }],
+      ['iced', 'Лимонад малина-мята', 'Освежающий, без кофеина', { M: 250 }]
     ] },
-    { id: 'nocoffee', name: 'Не кофе', note: 'Для тех, кому сегодня без кофеина.', items: [
-      ['tea', 'Чай листовой', 'Чёрный, зелёный или травяной, чайник 500 мл', [180]],
-      ['cocoa', 'Какао с маршмеллоу', 'Как в детстве, только вкуснее', [230]],
-      ['choco', 'Горячий шоколад', 'Густой, на бельгийском шоколаде', [260]]
+    { id: 'author', name: 'Special', note: 'Авторские напитки — то, за чем возвращаются гости.', items: [
+      ['cheese', 'Раф крем-чиз с солёной карамелью', 'Сливочный, с солёно-сладкой нотой', { L: 320 }, 1],
+      ['cheese', 'Латте крем-чиз с черникой', 'Нежная сырная шапка и ягоды', { L: 250 }],
+      ['latte', 'Пряный латте', 'Тёплые специи и молоко', { M: 200 }],
+      ['raf', 'Лавандовый раф', 'Сливочный, с лавандой', { M: 330 }],
+      ['raf', 'Малиновый раф', 'Сливочный, с малиной', { M: 330 }]
     ] },
-    { id: 'food', name: 'Выпечка и сэндвичи', note: 'Свежая выпечка каждое утро. Сэндвичи собираем при вас.', items: [
-      ['croissant', 'Круассан', 'Сливочное масло, хрустящие слои', [150], 1],
-      ['croissant', 'Круассан с ветчиной и сыром', 'Подогреем, если хотите', [290]],
-      ['sandwich', 'Сэндвич с курицей', 'Курица, сыр, томаты, айсберг', [320]],
-      ['sandwich', 'Сэндвич с лососем', 'Слабосолёный лосось, сливочный сыр', [390]],
-      ['cinnabon', 'Синнабон', 'Булочка с корицей и сливочным кремом', [220]],
-      ['cheesecake', 'Чизкейк', 'Нью-Йорк, с ягодным соусом', [280]],
-      ['cookie', 'Печенье с шоколадом', 'Большое, мягкое внутри', [120]]
+    { id: 'nocoffee', name: 'Без кофе', note: 'Для тех, кому сегодня без кофеина.', items: [
+      ['cocoa', 'Какао', 'Как в детстве, только вкуснее', { S: 160, M: 200, L: 260 }],
+      ['choco', 'Горячий шоколад', 'Густой и согревающий', { S: 170, M: 230, L: 270 }],
+      ['cocoa', 'Молочный коктейль', 'Холодный, взбитый', { S: 160, M: 180, L: 210 }],
+      ['matcha', 'Матча-латте', 'Японский зелёный чай с молоком', { M: 190 }],
+      ['tea', 'Чай малиновый крем-чиз', 'Ягодный чай с нежной пенкой', { M: 210 }],
+      ['tea', 'Чай облепиховый', 'Яркий, с кислинкой — греет в холод', { M: 160 }],
+      ['tea', 'Чай листовой', 'Чёрный или зелёный', { M: 100 }]
+    ] },
+    { id: 'food', name: 'Завтраки и витрина', note: 'Выпечку и сэндвичи привозят каждое утро, витрина меняется — что сегодня, кофейня пишет в Telegram.', items: [
+      ['sandwich', 'К-комбо с сэндвичем', 'Сэндвич и кофе — завтрак по пути на работу', { '': 430 }, 1, 'breakfast'],
+      ['croissant', 'К-комбо с сырниками', 'Сырники с топпингом и кофе', { '': 365 }]
     ] }
   ];
   const box = $('#menu');
   if (box) {
     const tabs = $('#tabs');
     tabs.innerHTML = MENU.map((g, i) => `<button class="tab" role="tab" type="button" data-g="${g.id}" aria-selected="${i === 0}">${g.name}</button>`).join('') + `<button class="tab" role="tab" type="button" data-g="build" aria-selected="false">Собрать напиток</button>`;
-    box.innerHTML = MENU.map(g => `<section class="menu-group" id="${g.id}"><h2>${g.name}</h2><p>${g.note}</p><div class="items">${g.items.map(([ico, n, d, p, hit]) => `
-      <div class="item" data-reveal><div class="ico">${I.icon(ico)}</div><div><h3>${n}${hit ? '<span class="hit">хит</span>' : ''}</h3><p>${d}</p></div>
-      <div class="buy">${p.map((pr, i) => `<button type="button" class="add" data-add="${encodeURIComponent(JSON.stringify({ ico, name: n, size: p.length > 1 ? 'SML'[i] : '', price: pr }))}" aria-label="Добавить: ${n}${p.length > 1 ? ', размер ' + 'SML'[i] : ''}, ${pr} рублей">${p.length > 1 ? `<i>${'SML'[i]}</i>` : ''}${pr} ₽<span aria-hidden="true">+</span></button>`).join('')}</div></div>`).join('')}</div></section>`).join('');
+    box.innerHTML = MENU.map(g => `<section class="menu-group" id="${g.id}"><h2>${g.name}</h2><p>${g.note}</p><div class="items">${g.items.map(([ico, n, d, p, hit, ph]) => `
+      <div class="item" data-reveal><div class="ico${ph ? ' ph' : ''}">${ph ? `<img src="assets/photos/${ph}.webp" alt="" loading="lazy" width="600" height="800">` : I.icon(ico)}</div><div><h3>${n}${hit ? '<span class="hit">хит</span>' : ''}</h3><p>${d}</p></div>
+      <div class="buy">${Object.entries(p).map(([sz, pr]) => `<button type="button" class="add" data-add="${encodeURIComponent(JSON.stringify({ ico, name: n, size: sz, price: pr }))}" aria-label="Добавить: ${n}${sz ? ', размер ' + sz : ''}, ${pr} рублей">${sz ? `<i>${sz}</i>` : ''}${pr} ₽<span aria-hidden="true">+</span></button>`).join('')}</div></div>`).join('')}</div></section>`).join('');
+    const vit = $('#vitrine-box'), food = document.getElementById('food');
+    if (vit && food) food.append(vit);
     $$('[data-reveal]', box).forEach(el => io ? io.observe(el) : el.classList.add('in'));
     tabs.addEventListener('click', e => {
       const b = e.target.closest('.tab'); if (!b) return;
@@ -201,14 +209,14 @@
   const bld = $('#builder');
   if (bld) {
     const BASES = {
-      cappuccino: { n: 'Капучино', p: [200, 240, 280], l: [['esp', .22], ['milk', .38], ['foam', .26]] },
-      latte: { n: 'Латте', p: [220, 260, 300], l: [['esp', .18], ['milk', .6], ['foam', .12]] },
-      raf: { n: 'Раф', p: [260, 300, 340], l: [['raf', .78], ['foam', .12]] },
-      flat: { n: 'Флэт уайт', p: [250, 290, 330], l: [['esp', .34], ['milk', .44], ['foam', .06]] },
-      americano: { n: 'Американо', p: [170, 190, 210], l: [['water', .8], ['crema', .06]] }
+      cappuccino: { n: 'Капучино', p: [140, 200, 260], l: [['esp', .22], ['milk', .38], ['foam', .26]] },
+      latte: { n: 'Латте', p: [null, 200, 240], l: [['esp', .18], ['milk', .6], ['foam', .12]] },
+      raf: { n: 'Раф', p: [null, 260, 310], l: [['raf', .78], ['foam', .12]] },
+      flat: { n: 'Флэт уайт', p: [180, null, 260], l: [['esp', .34], ['milk', .44], ['foam', .06]] },
+      americano: { n: 'Американо', p: [130, 160, 180], l: [['water', .8], ['crema', .06]] }
     };
-    const MILK = { cow: ['Обычное', 0, '#EADBC6'], oat: ['Овсяное', 60, '#E6D2B0'], coco: ['Кокосовое', 60, '#F2EDE3'], almond: ['Миндальное', 60, '#E9D5BD'] };
-    const SYR = { none: ['Без сиропа', 0, null], caramel: ['Карамель', 40, '#D9A15B'], vanilla: ['Ваниль', 40, '#F2E2B8'], lavender: ['Лаванда', 40, '#CDBBE0'], cheese: ['Сырный', 40, '#F3D488'] };
+    const MILK = { cow: ['Обычное', 0, '#EADBC6'], oat: ['Овсяное', 50, '#E6D2B0'], coco: ['Кокосовое', 50, '#F2EDE3'], almond: ['Миндальное', 50, '#E9D5BD'] };
+    const SYR = { none: ['Без сиропа', 0, null], caramel: ['Карамель', 40, '#D9A15B'], vanilla: ['Ваниль', 40, '#F2E2B8'], lavender: ['Лаванда', 40, '#CDBBE0'], honey: ['Мёд', 40, '#E9B85A'] };
     const st = { base: 'cappuccino', size: 1, milk: 'cow', syr: 'none', shot: 0 };
     const seg = (id, obj, key, fmt) => {
       const el = $(id);
@@ -219,11 +227,16 @@
     seg('#b-size', { 0: 'S · 250', 1: 'M · 350', 2: 'L · 450' }, 'size', (k, v) => v);
     seg('#b-milk', MILK, 'milk', (k, v) => v[0] + (v[1] ? ` +${v[1]}` : ''));
     seg('#b-syr', SYR, 'syr', (k, v) => v[0] + (v[1] ? ` +${v[1]}` : ''));
-    seg('#b-shot', { 0: 'Один шот', 1: 'Двойной +60' }, 'shot', (k, v) => v);
+    const TOP = { 0: ['Без топпинга', 0, ''], 1: ['Маршмеллоу', 30, 'маршмеллоу'], 2: ['Сырная пенка', 50, 'сырная пенка'] };
+    seg('#b-shot', TOP, 'shot', (k, v) => v[0] + (v[1] ? ` +${v[1]}` : ''));
+    const priceOf = () => { const b = BASES[st.base], noMilk = st.base === 'americano'; return b.p[st.size] + (noMilk ? 0 : MILK[st.milk][1]) + SYR[st.syr][1] + TOP[st.shot][1]; };
+    const optsOf = () => { const noMilk = st.base === 'americano'; return [!noMilk && st.milk !== 'cow' ? MILK[st.milk][0].toLowerCase() + ' молоко' : '', st.syr !== 'none' ? (st.syr === 'honey' ? 'мёд' : 'сироп ' + SYR[st.syr][0].toLowerCase()) : '', TOP[st.shot][2]]; };
     const COLORS = { esp: '#4A2C1D', water: '#6E4127', crema: '#B9814E', foam: '#FBF5EC', raf: '#E3CDAE' };
     function render() {
       const b = BASES[st.base], noMilk = st.base === 'americano';
       if (noMilk) st.milk = 'cow';
+      if (b.p[st.size] == null) st.size = b.p[1] != null ? 1 : 2;
+      $$('#b-size button').forEach(x => { const off = b.p[+x.dataset.v] == null; x.disabled = off; x.style.opacity = off ? .4 : 1; });
       $$('#b-milk button').forEach(x => { x.disabled = noMilk; x.style.opacity = noMilk ? .4 : 1; });
       $$('#builder .seg button').forEach(x => {
         const key = { 'b-base': 'base', 'b-size': 'size', 'b-milk': 'milk', 'b-syr': 'syr', 'b-shot': 'shot' }[x.parentElement.id];
@@ -234,7 +247,7 @@
       const layers = b.l.map(([k, f]) => {
         let col = k === 'milk' ? milkCol : COLORS[k];
         if (syr && (k === 'milk' || k === 'raf')) col = mix(col, syr, .45);
-        if (st.shot && k === 'esp') f += .08;
+        if (st.shot === 2 && k === 'foam') col = '#F3D488';
         return [col, f];
       });
       const rects = $$('#glass .layer');
@@ -245,14 +258,11 @@
         r.style.y = y + 'px'; r.style.height = (h + .5) + 'px'; r.style.fill = L[0];
       });
       $('#glass .glass-body').style.transform = `scale(${[.8, .9, 1][st.size]})`;
-      const price = b.p[st.size] + (noMilk ? 0 : MILK[st.milk][1]) + SYR[st.syr][1] + st.shot * 60;
-      $('#b-price').textContent = rub(price);
-      $('#b-name').textContent = [b.n, ['S', 'M', 'L'][st.size], !noMilk && st.milk !== 'cow' ? MILK[st.milk][0].toLowerCase() + ' молоко' : '', st.syr !== 'none' ? 'сироп ' + SYR[st.syr][0].toLowerCase() : '', st.shot ? 'двойной шот' : ''].filter(Boolean).join(' · ');
+      $('#b-price').textContent = rub(priceOf());
+      $('#b-name').textContent = [b.n, ['S', 'M', 'L'][st.size], ...optsOf()].filter(Boolean).join(' · ');
     }
     $('#b-add').addEventListener('click', () => {
-      const b = BASES[st.base], noMilk = st.base === 'americano';
-      const price = b.p[st.size] + (noMilk ? 0 : MILK[st.milk][1]) + SYR[st.syr][1] + st.shot * 60;
-      const opts = [!noMilk && st.milk !== 'cow' ? MILK[st.milk][0].toLowerCase() + ' молоко' : '', st.syr !== 'none' ? 'сироп ' + SYR[st.syr][0].toLowerCase() : '', st.shot ? 'двойной шот' : ''].filter(Boolean).join(', ');
+      const b = BASES[st.base], price = priceOf(), opts = optsOf().filter(Boolean).join(', ');
       order.add({ ico: st.base === 'raf' ? 'raf' : st.base === 'americano' ? 'americano' : st.base === 'latte' ? 'latte' : st.base === 'flat' ? 'flat' : 'cappuccino', name: b.n, size: 'SML'[st.size], opts, price });
     });
     function mix(a, b, t) { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); const A = p(a), B = p(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); }
