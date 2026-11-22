@@ -503,3 +503,18 @@ footer.site li.hol{font-size:12.5px;opacity:.75;max-width:200px}
 @keyframes lfloat{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-10px)}}
 @keyframes lshine{0%,55%{left:-60%}85%,100%{left:130%}}
 @media (prefers-reduced-motion:reduce){.lcard,.lcard .lc-shine{animation:none}}
+
+/* штампы на карте лояльности: 6 напитков + подарок */
+.lcard .lc-top{display:flex;justify-content:space-between;align-items:flex-start}
+.lcard .lc-top small{margin:0}
+.lc-six{font:400 15px/1 var(--f-display);padding:7px 11px;border-radius:999px;background:rgba(250,247,242,.12)}
+.lc-stamps{display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(5px,1.2vw,9px);position:relative}
+.st-c{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;border:1.5px dashed rgba(250,247,242,.35);color:#FAF7F2;position:relative}
+.st-c svg{width:58%;height:58%;opacity:0;transform:scale(.4) rotate(-20deg)}
+.in .st-c svg,.lcard-wrap.in .st-c svg{animation:stamp .5s var(--out) forwards;animation-delay:calc(.35s + var(--i) * .22s)}
+.st-c:not(.gift){border-style:solid;border-color:transparent;background:rgba(250,247,242,.14)}
+.st-c.gift{border-color:#E9C891;color:#2B211B}
+.lcard-wrap.in .st-c.gift{animation:giftfill .5s var(--out) forwards;animation-delay:1.75s}
+@keyframes stamp{to{opacity:1;transform:none}}
+@keyframes giftfill{to{background:linear-gradient(135deg,#E9C891,#C99A5C);border-style:solid;box-shadow:0 0 0 4px rgba(233,200,145,.18)}}
+@media (prefers-reduced-motion:reduce){.st-c svg{opacity:1;transform:none;animation:none!important}.st-c.gift{background:linear-gradient(135deg,#E9C891,#C99A5C);border-style:solid}}
