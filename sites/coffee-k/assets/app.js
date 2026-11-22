@@ -30,12 +30,16 @@
   });
   addEventListener('pageshow', e => { if (e.persisted) document.body.classList.remove('leaving', 'menu-open'); });
 
-  /* открыто ли сейчас: ежедневно 8:00–19:00 по Москве (в Тамбове то же время) */
+  /* часы работы: пн–пт 8:00–19:00, сб–вс 9:00–18:00, по Москве (в Тамбове то же время) */
+  const HOURS = day => (day === 0 || day === 6) ? [9 * 60, 18 * 60] : [8 * 60, 19 * 60]; // day: 0 — вс … 6 — сб
+  const hm = m => `${m / 60 | 0}:${String(m % 60).padStart(2, '0')}`;
   const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-  const mins = now.getHours() * 60 + now.getMinutes(), open = mins >= 480 && mins < 1140;
+  const mins = now.getHours() * 60 + now.getMinutes(), today = HOURS(now.getDay()), tomorrow = HOURS((now.getDay() + 1) % 7);
+  const open = mins >= today[0] && mins < today[1];
+  const nextOpen = mins < today[0] ? `с ${hm(today[0])}` : `завтра с ${hm(tomorrow[0])}`;
   $$('.status').forEach(s => {
     s.classList.toggle('open', open);
-    s.innerHTML = `<i></i>${open ? 'Открыто до 19:00' : 'Закрыто · с 8:00'}`;
+    s.innerHTML = `<i></i>${open ? `Открыто до ${hm(today[1])}` : `Закрыто · ${nextOpen}`}`;
   });
 
   /* появление при прокрутке */
@@ -82,10 +86,11 @@
   document.addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) order.add(JSON.parse(decodeURIComponent(b.dataset.add))); });
 
   function slots() {
-    // интервалы по 15 минут: от «через 15 минут» до 18:45; если поздно — на завтра с 8:00
-    const res = [], m0 = Math.ceil((mins + 15) / 15) * 15;
-    if (open && m0 <= 18 * 60 + 45) for (let m = m0; m <= 18 * 60 + 45; m += 15) res.push(['Сегодня', m]);
-    else for (let m = 8 * 60; m <= 12 * 60; m += 15) res.push(['Завтра', m]);
+    // интервалы по 15 минут: от «через 15 минут» до закрытия; до открытия — на сегодняшнее утро; после закрытия — на завтра
+    const res = [], last = today[1] - 15, m0 = Math.ceil((mins + 15) / 15) * 15;
+    if (open && m0 <= last) for (let m = m0; m <= last; m += 15) res.push(['Сегодня', m]);
+    else if (mins < today[0]) for (let m = today[0]; m <= today[0] + 4 * 60; m += 15) res.push(['Сегодня', m]);
+    else for (let m = tomorrow[0]; m <= tomorrow[0] + 4 * 60; m += 15) res.push(['Завтра', m]);
     return res.map(([d, m]) => `${d}, ${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
   }
   function renderOrder() {
@@ -95,7 +100,7 @@
     if (body.dataset.done) return;
     if (!n) { body.innerHTML = `<div class="dr-empty">${I.icon('espresso')}<h3>Пока пусто</h3><p class="muted">Выберите напиток в меню — нажмите на его цену.</p><a class="btn" href="menu.html">Открыть меню</a></div>`; return; }
     const keep = {}; $$('input,textarea,select', body).forEach(i => keep[i.id] = i.value);
-    const asap = open && mins < 18 * 60 + 45;
+    const asap = open && mins < today[1] - 15;
     body.innerHTML = `<ul class="dr-list">${l.map((x, i) => `<li><span class="ico">${I.icon(x.ico)}</span><div><b>${x.name}${x.size ? ' · ' + x.size : ''}</b>${x.opts ? `<small>${x.opts}</small>` : ''}<span class="qty"><button type="button" data-q="${i}" data-d="-1" aria-label="Меньше">−</button>${x.qty}<button type="button" data-q="${i}" data-d="1" aria-label="Больше">+</button></span></div><strong>${rub(x.price * x.qty)}</strong></li>`).join('')}</ul>
       <form class="form dr-form" novalidate>
         <div class="field"><span class="lbl2">Как заберёте</span><div class="seg" id="o-where"><button type="button" aria-pressed="true" data-v="С собой">С собой</button><button type="button" aria-pressed="false" data-v="В зале">Выпью в зале</button></div></div>
@@ -177,9 +182,9 @@
       ['tea', 'Чай облепиховый', 'Яркий, с кислинкой — греет в холод', { M: 160 }],
       ['tea', 'Чай листовой', 'Чёрный или зелёный', { M: 100 }]
     ] },
-    { id: 'food', name: 'Завтраки и витрина', note: 'Выпечку и сэндвичи привозят каждое утро, витрина меняется — что сегодня, кофейня пишет в Telegram.', items: [
+    { id: 'food', name: 'Завтраки и витрина', note: 'Каждое утро делаем сэндвичи, на витрине — десерты. Витрина меняется — что сегодня, кофейня пишет в Telegram.', items: [
       ['sandwich', 'К-комбо с сэндвичем', 'Сэндвич и кофе — завтрак по пути на работу', { '': 430 }, 1, 'breakfast'],
-      ['croissant', 'К-комбо с сырниками', 'Сырники с топпингом и кофе', { '': 365 }]
+      ['cookie', 'К-комбо с сырниками', 'Сырники с топпингом и кофе', { '': 365 }]
     ] }
   ];
   const box = $('#menu');
@@ -273,7 +278,7 @@
   const wk = $('#week');
   if (wk) {
     const d = (now.getDay() + 6) % 7;
-    wk.innerHTML = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((n, i) => `<div class="${i === d ? 'today' : ''}"><b>${n}</b>8–19</div>`).join('');
+    wk.innerHTML = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((n, i) => { const h = HOURS((i + 1) % 7); return `<div class="${i === d ? 'today' : ''}"><b>${n}</b>${h[0] / 60}–${h[1] / 60}</div>`; }).join('');
   }
 
   /* ——— форма брони (демо) ——— */
@@ -288,7 +293,14 @@
     $$('[data-g-step]').forEach(b => b.addEventListener('click', () => { guests.value = Math.max(1, Math.min(8, +guests.value + +b.dataset.gStep)); }));
     const date = $('#bk-date'); const t = new Date(); date.min = t.toISOString().slice(0, 10); date.value = date.min;
     const time = $('#bk-time');
-    for (let m = 8 * 60; m <= 18 * 60; m += 30) time.insertAdjacentHTML('beforeend', `<option>${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}</option>`);
+    // время брони — в часы работы выбранного дня, последняя бронь за час до закрытия
+    const fillTimes = () => {
+      const [y, mo, dd] = date.value.split('-').map(Number), h = HOURS(new Date(y, mo - 1, dd).getDay()), keep = time.value;
+      time.innerHTML = '';
+      for (let m = h[0]; m <= h[1] - 60; m += 30) time.insertAdjacentHTML('beforeend', `<option>${String(m / 60 | 0).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}</option>`);
+      if ([...time.options].some(o => o.value === keep)) time.value = keep;
+    };
+    date.addEventListener('change', fillTimes); fillTimes();
   }
   $$('form[data-demo]').forEach(f => {
     $$('input,select,textarea', f).forEach(i => i.addEventListener('input', () => i.closest('.field')?.classList.remove('err')));
